@@ -1,0 +1,31 @@
+.previewPic-component-item{
+  float: left;
+  margin: 0 3px;
+  position: relative;
+  cursor: pointer;
+  border-radius:4px;
+  overflow: hidden;
+  &:hover{
+    .previewPic-component-info::before{
+      opacity: 1;
+    }
+  }
+  .previewPic-component-info{
+    &::before{
+      content: "";
+      position: absolute;
+      background-color: rgba(0,0,0,.5);
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: all .3s;
+    }
+  }
+  .previewPic-component-actions{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    transition: all .3s;
+  }
+}

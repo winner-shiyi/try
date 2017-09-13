@@ -1,0 +1,25 @@
+{
+  "resultCode": "0",
+  "resultData": {
+    "carNumber": "测试内容4d44",
+    "carType": "测试内容h120",
+    "driverId": "213",
+    "driverName": "测试内容k7ej",
+    "driverPhone": "110",
+    "punchInfo": [
+      {
+        "key":1,
+        "address": "测试内容0m3e",
+        "node": "测试内容shf7",
+        "time": "测试内容5v2t"
+      },
+      {
+        "key":2,
+        "address": "address",
+        "node": "node",
+        "time": "time"
+      }
+    ]
+  },
+  "resultDesc": "success"
+}

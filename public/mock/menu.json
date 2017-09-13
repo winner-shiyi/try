@@ -1,0 +1,96 @@
+{
+  "resultCode": "0000",
+  "resultData": [
+    {
+      "id": "100",
+      "href": "/Manage/Distribution",
+      "isShow": "1",
+      "name": "首页",
+      "parentId": "1",
+      "parentIds": "0,1,",
+      "root": false,
+      "sort": 10
+    },
+    {
+      "id": "121",
+      "href": "/Manage/Distribution",
+      "isShow": "1",
+      "name": "车配任务管理",
+      "parentId": "100",
+      "parentIds": "0,1,100,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "href": "/Manage/Distribution",
+      "id": "1211",
+      "isShow": "1",
+      "name": "车配任务管理",
+      "parentId": "121",
+      "parentIds": "0,1,100,121,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "1212",
+      "isShow": "0",
+      "name": "查看页面",
+      "parentId": "1211",
+      "parentIds": "0,1,100,121,1211,",
+      "permission": "Manage:Distribution:read",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "href": "/Manage/AddDistribution",
+      "id": "1221",
+      "isShow": "1",
+      "name": "新增车配任务",
+      "parentId": "121",
+      "parentIds": "0,1,100,121,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "1222",
+      "isShow": "0",
+      "name": "查看页面",
+      "parentId": "1221",
+      "parentIds": "0,1,100,121,1221,",
+      "permission": "Manage:AddDistribution:read",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "href": "/Manage/ChooseDriver",
+      "id": "1231",
+      "isShow": "1",
+      "name": "分配司机列表",
+      "parentId": "121",
+      "parentIds": "0,1,100,121,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "1232",
+      "isShow": "0",
+      "name": "查看页面",
+      "parentId": "1231",
+      "parentIds": "0,1,100,121,1231,",
+      "permission": "Manage:ChooseDriver:read",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "200",
+      "isShow": "1",
+      "name": "其他",
+      "parentId": "1",
+      "parentIds": "0,1,",
+      "root": false,
+      "sort": 10
+    }
+
+  ],
+  "resultDesc": "SUCCESS"
+}

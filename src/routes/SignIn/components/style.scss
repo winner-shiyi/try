@@ -1,0 +1,28 @@
+.xg .login-layout.ant-layout {
+  background: rgb(40, 40, 40);
+}
+.login-form {
+  max-width: 450px;
+  background: rgb(40, 40, 40);
+  padding: 40px;
+  .login-form-button {
+    width: 100%;
+  }
+  .login-logo-wrapper {
+    text-align: center;
+    font-size: 25px;
+    color: rgb(173, 173, 173);
+    margin: 16px 0 40px;
+  }
+  .login-fp {
+    text-align: center;
+    margin: -10px 0 10px;
+  }
+}
+.ant-confirm .ant-modal-body {
+  padding: 30px 0;
+  font-size: 14px;
+  .ant-confirm-content {
+    margin-left: 0
+  }
+}
