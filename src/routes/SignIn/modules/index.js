@@ -46,7 +46,7 @@ const login = (params) => (dispatch) => {
       if (json.resultCode === '0') {
         dispatch(loginSuccess(json.resultData));
         return true;
-      } 
+      }
       dispatch(loginFailure(json.resultDesc));
       return false;
     });
@@ -97,7 +97,7 @@ const initialState = {
   user: '',
   loading: false,
 };
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action = {}) {
   const handler = ACTION_HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;

@@ -159,7 +159,7 @@ export default class CommonSelect extends Component {
 
   onChange(value) {
     this.props.onChange && this.props.onChange(value);
-    this.props.onSelect && 
+    this.props.onSelect &&
     this.props.onSelect(value, this.props.data.find((item) => item[this.props.valueName || 'id'] === value));
   }
 
@@ -219,7 +219,7 @@ export default class CommonSelect extends Component {
       options = data.map((item) => {
         if (Object.prototype.toString.call(item) === '[object Array]') {
           return <Option key={item[0]}>{item[1]}</Option>;
-        } 
+        }
         return <Option key={`${item[valueName || 'id'] || item.value}`}>{item[displayName || 'label']}</Option>;
       });
     }

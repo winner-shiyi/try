@@ -40,7 +40,7 @@ const failure = (msg) => ({
 
 const search = (params) => (dispatch) => { // 第一次进入页面
   dispatch(request());
-  fetch('/order/list', params) 
+  fetch('/order/list', params)
     .then((json) => {
       if (json.resultCode === '0') {
         dispatch(success(json.resultData));
@@ -56,7 +56,7 @@ export const downExcel = () => {
       const binaryData = [];
       binaryData.push(json);
       const downloadUrl = window.URL.createObjectURL(new Blob(binaryData, { type: 'application/zip' }));
-      // const downloadUrl = window.URL.createObjectURL(json)  // todo 
+      // const downloadUrl = window.URL.createObjectURL(json)  // todo
       const a = document.createElement('a');
       a.href = downloadUrl;
       a.download = '车配导入订单模板.xlsx';
@@ -72,7 +72,7 @@ export const actions = {
   setStatus: (params) => ({
     types: [DISTRIBUTION_SET_STATUS_REQUEST, DISTRIBUTION_SET_STATUS_SUCCESS, DISTRIBUTION_SET_STATUS_FAILURE],
     callAPI: () => fetch('/order/cancel', { // 订单编号
-      orderNo: params.orderNo, 
+      orderNo: params.orderNo,
     }),
   }),
   showModal: createAction(DISTRIBUTION_ENTRY_SHOW),
@@ -80,7 +80,7 @@ export const actions = {
   deleteOrder: (params) => ({
     types: [DISTRIBUTION_DELETE_REQUEST, DISTRIBUTION_DELETE_SUCCESS, DISTRIBUTION_DELETE_FAILURE],
     callAPI: () => fetch('/order/delete', { // 订单编号
-      orderNo: params.orderNo, 
+      orderNo: params.orderNo,
     }),
   }),
   clearData: createAction(DISTRIBUTION_CLEAR_DATA),
@@ -199,7 +199,7 @@ const initialState = {
   searchParams: {
   },
 };
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action = {}) {
   const handler = ACTION_HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;

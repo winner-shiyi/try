@@ -32,12 +32,11 @@ export default class SendForm extends Component {
         map: map1,
       });
     });
-    // this.props.route.onEnter = () => { 
+    // this.props.route.onEnter = () => {
     // 保证路由切换后高德定位正确，不能componentDidMount里面写route的onEnter
     this.mapChange();
     // }
   }
-  
   /**
    * 监听发货商家名称输入值变化 
    * 参数：val 表示用户输入的商家名称
@@ -45,7 +44,6 @@ export default class SendForm extends Component {
   onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]
     // 过400毫秒以后去请求接口
     clearTimeout(this.timer);
-    
     // 如果商家名称为空则不发送请求，并清空原有填充值
     if (!(`${val}`).trim()) {
       return;
@@ -58,13 +56,6 @@ export default class SendForm extends Component {
         });
       });
     }, 400);
-  }
-
-  onRegionChange = () => {
-    this.mapChange();
-  }
-  onAddressDetailChange = () => {
-    this.mapChange();
   }
 
   onSelect = (val) => {
@@ -82,15 +73,32 @@ export default class SendForm extends Component {
     values.phone.value = shopItem.phone;
     values.region.value = [shopItem.province, shopItem.city, shopItem.area];
     values.addressDetail.value = shopItem.addressDetail;
-
+    this.props.clearErrors();
     this.props.changeRecord(values);
+    this.mapChange();
+  }
+
+  onFocus = () => {
+    this.props.getActiveId('-1');
+  }
+
+  /**
+   * 地区改变时
+   */
+  onRegionChange = () => {
+    this.mapChange();
+  }
+  /**
+   * 详细地址改变时
+   */
+  onAddressDetailChange = () => {
     this.mapChange();
   }
   /**
    * val1Arr拼接val2作为值传给高得地图api的公共函数
    */
   mapChange = () => {
-    clearTimeout(this.timer1); 
+    clearTimeout(this.timer1);
     this.timer1 = setTimeout(() => { // 使用setTimeout才能实时拿到最新的val1Arr和val2
       const val1Arr = this.props.values.region.value;
       const val2 = this.props.values.addressDetail.value;
@@ -101,10 +109,8 @@ export default class SendForm extends Component {
             adcode: pois.adcode,
             latitude: pois.location.lat,
             longitude: pois.location.lng,
-            
           };
         }
-        
         if (status === 'no_data') {
           window.mapInfosToWindow = {};
           // message.error('请输入有正确的发货地址')
@@ -118,6 +124,7 @@ export default class SendForm extends Component {
     fields[0].onChange = this.onShopNameChange;
     fields[0].onSelect = this.onSelect;
     fields[0].dataSource = this.state.dataSource;
+    fields[0].onFocus = this.onFocus;
     fields[4].onChange = this.onRegionChange;
     fields[5].onChange = this.onAddressDetailChange;
     return (

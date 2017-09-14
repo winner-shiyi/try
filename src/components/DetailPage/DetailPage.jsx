@@ -33,7 +33,7 @@ class DetailPage extends Component {
             { item.label }
           </Button>
         );
-      } 
+      }
       return false;
     });
     const formItemLayout = ({
@@ -121,10 +121,6 @@ export default Form.create({
       const fld = props.fields.find((item) => item.name === fields[key].name);
       fields[key].type = fld && fld.type;
     }
-    // for (const v in fields) {
-    //   const fld = props.fields.find((item) => item.name === fields[v].name);
-    //   fields[v].type = fld && fld.type;
-    // }
     props.changeRecord && props.changeRecord({
       ...props.values,
       ...fields,

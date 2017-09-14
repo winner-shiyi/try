@@ -25,7 +25,7 @@ export const updateLocation = ({ dispatch }) => (nextLocation) => dispatch(locat
 // Reducer
 // ------------------------------------
 const initialState = browserHistory.getCurrentLocation();
-export default function locationReducer(state = initialState, action) {
+export default function locationReducer(state = initialState, action = {}) {
   return action.type === LOCATION_CHANGE
     ? action.payload
     : state;

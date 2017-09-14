@@ -7,5 +7,28 @@
     "production": "//consignor.toobob.com",
     "devRemote":"//tubobo-consignor.dev.ops.com",
     "ouyang":"//172.16.14.110:8080/tubobo-express"
+  },
+  "countly": {
+		"sdk": {
+			"development": "http://172.16.2.52/sdk/web/countly.min.js",
+			"devRemote": "http://172.16.2.52/sdk/web/countly.min.js",
+			"uat": "http://172.16.2.52/sdk/web/countly.min.js",
+			"test": "http://172.16.2.52/sdk/web/countly.min.js",
+			"production": "http://countly.toobob.com/sdk/web/countly.min.js"
+		},
+		"url": {
+			"development": "http://172.16.2.52",
+			"devRemote": "http://172.16.2.52",
+			"uat": "http://172.16.2.52",
+			"test": "http://172.16.2.52",
+			"production": "http://countly.toobob.com"
+		},
+		"appKey": {
+			"development": "004ae7c402391658ba94444926ded5a392204b64",
+			"devRemote": "004ae7c402391658ba94444926ded5a392204b64",
+			"uat": "004ae7c402391658ba94444926ded5a392204b64",
+			"test": "004ae7c402391658ba94444926ded5a392204b64",
+			"production": "a115ef060047afd14d38dc71a8e63c16445f95f0"
+		}
   }
 }

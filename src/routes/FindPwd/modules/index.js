@@ -40,7 +40,7 @@ const verify = (params) => (dispatch) => {
       if (json.resultCode === '0000') {
         dispatch(verifySuccess(json.resultData));
         return true;
-      } 
+      }
       dispatch(verifyFailure(json.resultDesc));
       return false;
     });
@@ -68,7 +68,7 @@ const set = (params) => (dispatch) => {
       if (json.resultCode === '0000') {
         dispatch(setSuccess(json.resultData));
         return true;
-      } 
+      }
       dispatch(setFailure(json.resultDesc));
       return false;
     });
@@ -101,7 +101,7 @@ const code = (params) => (dispatch) => {
       if (json.resultCode === '0000') {
         dispatch(codeSuccess(json.resultData));
         return true;
-      } 
+      }
       dispatch(codeFailure(json.resultDesc));
       return false;
     });
@@ -178,7 +178,7 @@ const initialState = {
   verifyLoading: false,
   setLoading: false,
 };
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action = {}) {
   const handler = ACTION_HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;

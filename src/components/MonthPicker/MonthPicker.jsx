@@ -3,8 +3,8 @@ import { DatePicker } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-const { MonthPicker } = DatePicker;
-export default class CommonDatePicker extends Component {
+const AntdMonthPicker = DatePicker.MonthPicker;
+export default class MonthPicker extends Component {
   static propTypes = {
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -39,7 +39,7 @@ export default class CommonDatePicker extends Component {
 
   render() {
     return (
-      <MonthPicker
+      <AntdMonthPicker
         {...this.props}
         value={this.state.value}
         onChange={this.handleChange.bind(this)}

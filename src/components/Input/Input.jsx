@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import { AutoComplete } from 'antd';
 import PropTypes from 'prop-types';
 
-export default class CommonInput extends Component {
+export default class Input extends Component {
   static propTypes = {
     onChange: PropTypes.func,
-    // value: PropTypes.string,
     disabled: PropTypes.bool,
-    // buttonText: PropTypes.string,
-    // buttonClick: PropTypes.func,
   }
 
   constructor(props) {

@@ -9,7 +9,7 @@ function callAPIMiddleware({ dispatch, getState }) {
     const {
       types,
       callAPI,
-      shouldCallAPI = () => true,
+      shouldCallAPI,
       payload = {},
       callback,
     } = action;
@@ -31,7 +31,7 @@ function callAPIMiddleware({ dispatch, getState }) {
       throw new Error('Expected callAPI to be a function.');
     }
 
-    if (!shouldCallAPI(getState())) {
+    if (typeof shouldCallAPI === 'function' && !shouldCallAPI(getState())) {
       return false;
     }
 
@@ -52,7 +52,7 @@ function callAPIMiddleware({ dispatch, getState }) {
           };
           callback && callback(newPayload, dispatch, getState());
           return dispatch(newPayload);
-        } 
+        }
         const failurePayload = {
           msg: response.resultDesc,
           type: failureType,

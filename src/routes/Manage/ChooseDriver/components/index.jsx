@@ -1,6 +1,6 @@
 import { browserHistory } from 'react-router';
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import ListPage from '../../../../components/ListPage';
 
 
@@ -16,7 +16,13 @@ class View extends Component {
   componentDidMount() {
     const { props } = this;
     props.searchCar({ token:sessionStorage.getItem('accessToken') });
-    props.searchDriver(this.props.searchParams);
+    props.searchDriver({
+      ...this.props.searchParams,
+      ...this.props.page,
+    });
+  }
+  componentWillUnmount() {
+    this.props.clearData();
   }
 
   search(params) {
@@ -32,6 +38,7 @@ class View extends Component {
       () => {
         const { paths } = this.props;
         if (paths) {
+          message.success('派单成功');
           browserHistory.push(paths);
         }
       }
@@ -41,16 +48,12 @@ class View extends Component {
   render() {
     const {
       data,
+      // driverStatus,
       carClassesData,
       carLengthData,
       isCanChoose,
       page,
     } = this.props;
-
-    // let dictionary = {
-    //   '0':'配送中',
-    //   '1':'已完成'
-    // };
 
     const routeId = this.props.params.id;
 
@@ -84,12 +87,6 @@ class View extends Component {
         name: 'carLength',
         data: carLengthData,
       },
-      // {
-      //   label: '司机工作状态',
-      //   name:'driverWorkStatus',
-      //   type: 'select',
-      //   data:driverStatus,
-      // },
       {
         label: '进行中任务数',
         name: 'driverOrderCount',
@@ -97,41 +94,14 @@ class View extends Component {
       {
         label: '操作',
         name: 'action',
-        // render: (text, record, index) => (
-        //   <span>
-        //     {
-        //       routeId && isCanChoose[index] === 1 
-        //       ? <Button
-        //         ref="choose"
-        //         type="secondary"
-        //         onClick={
-        //         () => {
-        //           const item = isCanChoose;
-        //           console.log('item', item);
-        //           if (this.state.index !== -1) {
-        //             item[this.state.index] = 1;
-        //           }
-        //           item[index] = 2;
-        //           this.setState({
-        //             isCanChoose:item,
-        //             index,
-        //             driverId:record.driverId,
-        //           });
-        //         }
-        //       }
-        //       >选择</Button> 
-        //       : routeId && isCanChoose[index] === 2 ? '已选择' : ''
-        //     } 
-        //   </span>
-        // ),
         render: (text, record, index) => {
           const choice = routeId && isCanChoose[index] === 2 ? '已选择' : '';
           return (
             <span>
               {
                 routeId && isCanChoose[index] === 1
-                  ? <Button 
-                    type="secondary" 
+                  ? <Button
+                    type="secondary"
                     onClick={() => {
                       const item = isCanChoose;
                       if (this.state.index !== -1) {
@@ -166,7 +136,7 @@ class View extends Component {
           page={page}
         />
         {
-          routeId && 
+          routeId &&
           <div style={{ textAlign:'center', marginBottom:'20px' }} >
             <Button type="secondary" onClick={this.dispatchOrder.bind(this)} >派单</Button>
           </div>

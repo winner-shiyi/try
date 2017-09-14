@@ -56,7 +56,7 @@ export default class OrderListPage extends Component {
               <Button
                 type="primary"
                 htmlType="submit"
-                onClick={this.props.showModal} 
+                onClick={this.props.showModal}
                 className="order-upload-btn"
               >订单批量导入</Button>
             </Col>
@@ -86,7 +86,7 @@ export default class OrderListPage extends Component {
             } : null
           }
         />
-        <Modal 
+        <Modal
           title="订单批量导入"
           width="600px"
           maskClosable={false}

@@ -14,11 +14,11 @@ export default class ReceiverForm extends Component {
     this.state = {
       dataSource: [],
     };
-    this.AmapId = `mapId${Math.random()}`;  
+    this.AmapId = `mapId${Math.random()}`;
     this.timer1 = null;
   }
 
-  componentDidMount() { 
+  componentDidMount() {
     const map = new window.AMap.Map(this.AmapId, {
       resizeEnable: true,
     });
@@ -34,13 +34,12 @@ export default class ReceiverForm extends Component {
     this.mapChange();
   }
   /**
-   * 监听收货商家名称输入值变化 
+   * 监听收货商家名称输入值变化
    * 参数：val 表示用户输入的商家名称
    */
   onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]
     // 过400毫秒以后去请求接口
     clearTimeout(this.timer);
-    
     // 如果商家名称为空则不发送请求，并清空原有填充值
     if (!(`${val}`).trim()) {
       return;
@@ -66,18 +65,20 @@ export default class ReceiverForm extends Component {
     let shopItem = newReceiverInfos[_id].find((item) => item.shopName === shopName);
 
     shopItem = shopItem || {};
-    
-    values[`${_id}userName`].value = shopItem.userName;
-    values[`${_id}phone`].value = shopItem.phone;
-    values[`${_id}region`].value = [shopItem.province, shopItem.city, shopItem.area];
-    values[`${_id}addressDetail`].value = shopItem.addressDetail;
-    
+    const suffix = 'suffix';
+
+    values[`userName-${_id}-${suffix}`].value = shopItem.userName;
+    values[`phone-${_id}-${suffix}`].value = shopItem.phone;
+    values[`region-${_id}-${suffix}`].value = [shopItem.province, shopItem.city, shopItem.area];
+    values[`addressDetail-${_id}-${suffix}`].value = shopItem.addressDetail;
+
+    this.props.clearErrors();
     this.props.changeRecord(values);
     this.mapChange();
   }
 
   onFocus = () => {
-    this.props.getAcctiveId(this.props.id);
+    this.props.getActiveId(this.props.id);
   }
 
   /**
@@ -98,9 +99,10 @@ export default class ReceiverForm extends Component {
   mapChange = () => {
     clearTimeout(this.timer1);
     this.timer1 = setTimeout(() => {
-      const val1Arr = this.props.values[`${this.props.id}region`].value;
-      const val2 = this.props.values[`${this.props.id}addressDetail`].value;
+      const suffix = 'suffix';
+      const val1Arr = this.props.values[`region-${this.props.id}-${suffix}`].value;
 
+      const val2 = this.props.values[`addressDetail-${this.props.id}-${suffix}`].value;
       this.placeSearch.search(`${val1Arr.join(',')},${val2}`, (status, result) => {
         if (result.info === 'OK' && result.poiList) {
           const pois = result.poiList.pois[0];
@@ -123,6 +125,7 @@ export default class ReceiverForm extends Component {
    */
   reduce(id) {
     this.props.reduceReceiverInfo(id);
+    // this.props.changeRecord(this.props.values);
   }
 
   render() {

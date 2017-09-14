@@ -145,7 +145,7 @@ const savePwd = (paramsTemp) => (dispatch) => {
       if (json.resultCode === '0000') {
         dispatch(savePwdSuccess(json.resultData));
         return true;
-      } 
+      }
       dispatch(savePwdFailure(json.resultDesc));
       return false;
     });
@@ -192,7 +192,7 @@ const initCompany = (params) => (dispatch) => {
       if (json.resultCode === '0000') {
         dispatch(companySuccess(json.resultData));
         return true;
-      } 
+      }
       dispatch(companyFailure(json.resultDesc));
       return false;
     });
@@ -322,7 +322,7 @@ const ACTION_HANDLERS = {
   [CLICK_TOP_MENU]: (state, action) => {
     const secondMenuData = state.secondMenuData.filter((item) => item.parentId === action.payload);
 
-    const firstLeaf = secondMenuData.length > 0 && 
+    const firstLeaf = secondMenuData.length > 0 &&
     state.leafMenuData.find((item) => item.parentId === secondMenuData[0].id);
 
     return {
@@ -426,7 +426,7 @@ const ACTION_HANDLERS = {
       ...state,
     };
   },
-  [INIT_COMPANY_FAILURE]: (state) => 
+  [INIT_COMPANY_FAILURE]: (state) =>
     // message.error(action.payload)
     ({
       ...state,
@@ -445,7 +445,7 @@ const initialState = {
   permission: {},
   selectedKeys: [],
 };
-export default function commonReducer(state = initialState, action) {
+export default function commonReducer(state = initialState, action = {}) {
   const handler = ACTION_HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;

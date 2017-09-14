@@ -1,3 +1,3 @@
-import WrappedFormPage from './FormPage';
- 
+import WrappedFormPage from './WrappedFormPage';
+
 export default WrappedFormPage;

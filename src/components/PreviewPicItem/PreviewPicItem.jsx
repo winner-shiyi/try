@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
 import { Icon } from 'antd';
 import './PreviewPicItem.scss';
 
@@ -12,7 +11,7 @@ class PreviewPic extends Component {
     return (
       <div
         role="presentation"
-        className="previewPic-component-item" 
+        className="previewPic-component-item"
         onClick={this.props.onClick.bind(this, imagrUrlArr, id)}
         style={{ width:`${this.props.width}px`, height:`${this.props.height}px` }}
       >

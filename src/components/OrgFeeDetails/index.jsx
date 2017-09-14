@@ -27,6 +27,7 @@ class OrgFeeDetails extends Component {
         {
           sumData.map((item, index) => {
             const { sumDate, sumKWH, sumPrice, detailData } = item;
+            const detailsIndex = `details-${index}`;
             const dataSumDiv = (
               <div>
                 <span style={{ display: 'inline-block', minWidth: '150px' }}>
@@ -41,7 +42,7 @@ class OrgFeeDetails extends Component {
               </div>
             );
             return (
-              <Panel header={dataSumDiv} key={`details-${index}`}>
+              <Panel header={dataSumDiv} key={detailsIndex}>
                 <Table
                   showHeader={false}
                   columns={detailColumns}

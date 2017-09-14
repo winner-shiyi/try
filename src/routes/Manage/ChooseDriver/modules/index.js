@@ -18,13 +18,18 @@ const CHOOSE_DRIVER_DISPATCHORDER_REQUEST = 'CHOOSE_DRIVER_DISPATCHORDER_REQUEST
 const CHOOSE_DRIVER_DISPATCHORDER_SUCCESS = 'CHOOSE_DRIVER_DISPATCHORDER_SUCCESS';
 const CHOOSE_DRIVER_DISPATCHORDER_FAILURE = 'CHOOSE_DRIVER_DISPATCHORDER_FAILURE';
 
-const CHOOSE_DRIVER_MOCK_RADIO = 'CHOOSE_DRIVER_MOCK_RADIO';
+const CHOOSE_DRIVER_CHANGE_SEARCH = 'CHOOSE_DRIVER_CHANGE_SEARCH';
+
+const CHOOSE_DRIVER_CLEAR_DATA = 'CHOOSE_DRIVER_CLEAR_DATA';
+
+const CHOOSE_DRIVER_SEARCH_RESET = 'CHOOSE_DRIVER_SEARCH_RESET';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 export const actions = {
-  mockRadio: createAction(CHOOSE_DRIVER_MOCK_RADIO, 'driverId'),
+  reset: createAction(CHOOSE_DRIVER_SEARCH_RESET),
+  changeSearch: createAction(CHOOSE_DRIVER_CHANGE_SEARCH, 'fields'),
   searchCar: (params) => ({
     types: [CHOOSE_DRIVER_CARSEARCH_REQUEST, CHOOSE_DRIVER_CARSEARCH_SUCCESS, CHOOSE_DRIVER_CARSEARCH_FAILURE],
     callAPI: () => fetch(`//${location.host}/mock/SearchCar.json`, params, {
@@ -38,12 +43,13 @@ export const actions = {
     }),
   }),
   dispatchOrder: (params) => ({
-    types: [CHOOSE_DRIVER_DISPATCHORDER_REQUEST, CHOOSE_DRIVER_DISPATCHORDER_SUCCESS, 
+    types: [CHOOSE_DRIVER_DISPATCHORDER_REQUEST, CHOOSE_DRIVER_DISPATCHORDER_SUCCESS,
       CHOOSE_DRIVER_DISPATCHORDER_FAILURE],
     callAPI: () => fetch('/order/dispatch', params, {
       method:'POST',
     }),
   }),
+  clearData: createAction(CHOOSE_DRIVER_CLEAR_DATA),
 };
 
 // ------------------------------------
@@ -73,6 +79,16 @@ const ACTION_HANDLERS = {
   [CHOOSE_DRIVER_SEARCH_REQUEST]: (state) => ({
     ...state,
   }),
+  [CHOOSE_DRIVER_SEARCH_RESET]: (state) => ({
+    ...state,
+    searchParams: {
+      pageNo:'1',
+      pageSize:'10',
+    },
+  }),
+  /**
+   * 一进入页面初始化列表数据
+   */
   [CHOOSE_DRIVER_SEARCH_SUCCESS] : (state, action) => {
     const newState = Object.assign({}, state);
     const { data } = action;
@@ -90,11 +106,10 @@ const ACTION_HANDLERS = {
         const item = itemTemp;
         item.key = index;
         item.id = index;
-        item.lock = true; // 给每个list增加一个变量锁
-        // if(item.driverWorkStatus==0){
-        //   isCanChoose.push(1);
+        // if (item.driverWorkStatus === 0) {
+        //   isCanChoose.push(0);
         //   item.driverWorkStatus = '配送中';
-        // }else if(item.driverWorkStatus==1){
+        // } else if (item.driverWorkStatus === 1) {
         //   isCanChoose.push(1);
         //   item.driverWorkStatus = '已完成';
         // }
@@ -117,23 +132,6 @@ const ACTION_HANDLERS = {
         pageSize: data.pageSize,
         count: data.total,
       },
-    };
-  },
-  [CHOOSE_DRIVER_MOCK_RADIO] : (state, action) => {
-    const newState = Object.assign({}, state);
-    const driverList = newState.data.list;
-    if (driverList.length !== 0) {
-      driverList.map((item) => {
-        if (item.driverId === action.driverId) {
-          // item.lock = !item.lock;  // todo
-        }
-        return false;
-      });
-    }
-    newState.data.driverList = driverList;
-    return {
-      ...state,
-      data: newState.data,
     };
   },
   [CHOOSE_DRIVER_SEARCH_FAILURE] : (state, action) => {
@@ -168,7 +166,24 @@ const ACTION_HANDLERS = {
       paths,
     };
   },
-
+  [CHOOSE_DRIVER_CHANGE_SEARCH]: (state, action) => ({
+    ...state,
+    searchParams: {
+      ...state.searchParams,
+      ...action.fields,
+    },
+  }),
+  [CHOOSE_DRIVER_CLEAR_DATA]: (state) => ({
+    ...state,
+    searchParams: {
+      pageNo:'1',
+      pageSize:'10',
+    },
+    page: {
+      pageNo: 1, // 控制台警告提示期望是number
+      pageSize: 10,
+    },
+  }),
 };
 
 // ------------------------------------
@@ -186,21 +201,15 @@ const initialState = {
     ['1', '已完成'],
   ],
   page: {
-    current: 1,
-    pageSize: 10,
-    count: 0,
-    pageNo: 1,
+    pageNo: '1',
+    pageSize: '10',
+    count: '0',
   },
   searchParams: {
-    pageNo: 1,
-    pageSize: 10,
-    driverName:'',
-    carType:'',
-    carNumber:'',
   },
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action = {}) {
   const handler = ACTION_HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;

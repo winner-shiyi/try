@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { message, Form, Row, Col, Button, Icon, BackTop } from 'antd';
+import { message, Form, Row, Col, Button, Icon } from 'antd';
 import { browserHistory } from 'react-router';
 import SendForm from '../SendForm';
 import ReceiverForm from '../ReceiverForm';
@@ -26,17 +26,10 @@ class FormPage extends Component {
       createType: 1,
     };
   }
-  
   /**
    * 判断是否为空对象
    */
-  isEmptyObject = (obj) => {
-    const keys = Object.keys(obj || {});
-    for (let i = 0; i < keys.length; i += 1) {
-      return false;
-    }
-    return true;
-  } 
+  isEmptyObject = (obj) => (Object.keys(obj).length === 0)
   /**
    * 添加收货地址
    */
@@ -66,7 +59,8 @@ class FormPage extends Component {
         let timeCompareLock = true; // 时间比较变量锁
 
         Object.keys(values).forEach((key) => {
-          const k = parseInt(key, 10);
+          const k = Number(key.split('-')[1]);
+          const name = key.split('-')[0];
           const curValue = values[key];
 
           if (isNaN(k)) {
@@ -85,37 +79,36 @@ class FormPage extends Component {
             if (!receiversInfoListObj[k]) {
               receiversInfoListObj[k] = {};
             }
-            receiversInfoListObj[k][key.replace(k, '')] = curValue;
+            receiversInfoListObj[k][name] = curValue;
             // 把省市区数组转成 对应字符串
-            if (key.replace(k, '') === 'region') {
+            if (name === 'region') {
               receiversInfoListObj[k].province = values[key][0];
               receiversInfoListObj[k].city = values[key][1];
               receiversInfoListObj[k].area = values[key][2];
             }
             // 从window上获取地图保存信息
-            mw = window[`${k}mapInfosToWindow`]; 
+            mw = window[`${k}mapInfosToWindow`];
             Object.assign(receiversInfoListObj[k], mw);
-            delete receiversInfoListObj[k].region; 
-            if (key.replace(k, '') === 'deliveryBeginTime') {
-              receiversInfoListObj[k].deliveryBeginTime = 
+            delete receiversInfoListObj[k].region;
+            if (name === 'deliveryBeginTime') {
+              receiversInfoListObj[k].deliveryBeginTime =
               new Date(receiversInfoListObj[k].deliveryBeginTime).getTime();
             }
-            if (key.replace(k, '') === 'deliveryEndTime') {
-              receiversInfoListObj[k].deliveryEndTime = 
+            if (name === 'deliveryEndTime') {
+              receiversInfoListObj[k].deliveryEndTime =
               new Date(receiversInfoListObj[k].deliveryEndTime).getTime();
             }
-            
             if (receiversInfoListObj[k].deliveryEndTime !== 0 && // 等于0的情况是，选择具体时间后又清空
               receiversInfoListObj[k].deliveryEndTime < receiversInfoListObj[k].deliveryBeginTime) {
               timeCompareLock = false;
-            }                 
+            }
           }
         });
         Object.keys(receiversInfoListObj).forEach((key) => {
           receiversInfoList.push(receiversInfoListObj[key]);
         });
         // 如果输入的是无效地址，弹窗提示并且return禁止提交表单
-        if (this.isEmptyObject(window.mapInfosToWindow) || this.isEmptyObject(mw)) { 
+        if (this.isEmptyObject(window.mapInfosToWindow) || this.isEmptyObject(mw)) {
           message.error('亲，请输入正确有效的地址哦~');
           return;
         }
@@ -153,9 +146,10 @@ class FormPage extends Component {
       senderSearch,
       newSenderInfos,
       changeRecord,
-      getAcctiveId,
+      getActiveId,
       receiverSearch,
       newReceiverInfos,
+      clearErrors,
     } = this.props;
     return (
       <div style={{ padding: 16, flex: '1 1 auto' }}>
@@ -177,13 +171,14 @@ class FormPage extends Component {
               </h2>
             </Col>
           </Row>
-          
           <SendForm
-            form={form} 
-            values={values} 
+            form={form}
+            values={values}
             changeRecord={changeRecord}
-            senderSearch={senderSearch} 
+            senderSearch={senderSearch}
             newSenderInfos={newSenderInfos}
+            getActiveId={getActiveId}
+            clearErrors={clearErrors}
           />
           <Row>
             <Col>
@@ -196,7 +191,8 @@ class FormPage extends Component {
             {
               receiverFields.length && receiverFields.map((item, index) => {
                 const AmapId = `mapContainessrGet${index}`;
-                const key = `receiverField${index}`;
+                // const key = `receiverField${index}`; 调很久的大坑，牢记
+                const key = `receiverField${item.id}`;
                 return (<ReceiverForm
                   form={form}
                   key={key}
@@ -207,9 +203,10 @@ class FormPage extends Component {
                   reduceReceiverInfo={reduceReceiverInfo}
                   values={values}
                   changeRecord={changeRecord}
-                  receiverSearch={receiverSearch} 
+                  receiverSearch={receiverSearch}
                   newReceiverInfos={newReceiverInfos}
-                  getAcctiveId={getAcctiveId}
+                  getActiveId={getActiveId}
+                  clearErrors={clearErrors}
                 />);
               })
             }
@@ -235,7 +232,7 @@ class FormPage extends Component {
             </Button>
           </FormItem>
         </Form>
-        <Row><BackTop>111</BackTop></Row>  
+        {/* <Row><BackTop>111</BackTop></Row> */}
       </div>
     );
   }
@@ -261,14 +258,7 @@ const WrappedFormPage = Form.create({
     }
     return res;
   },
-  onFieldsChange(props, flds) {  
-    // for (const v in fields) {
-    //   let fld = null;
-    //   props.receiverFields && props.receiverFields.forEach((receiverField) => {
-    //     fld = receiverField.fields.find((item) => item.name === fields[v].name);
-    //   });
-    //   fields[v].type = fld && fld.type;
-    // }
+  onFieldsChange(props, flds) {
     const fields = flds;
     const keys = Object.keys(fields || {});
     for (let i = 0; i < keys.length; i += 1) {

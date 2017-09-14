@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'antd';
 import { Link } from 'react-router';
 import OrderListPage from '../../../../components/OrderListPage';
-import './style.scss';
 import formatDate from '../../../../util/date';
+import './style.scss';
 
 class View extends Component {
   componentDidMount() { // 一进入页面后把table渲染出来
@@ -13,7 +13,7 @@ class View extends Component {
     });
   }
   componentWillUnmount() {
-    this.props.clearData();
+    this.props.clearData();// 这里不直接调用reset()方法是因为，reset只重置了搜索字段，没有重置分页
   }
 
   render() {
@@ -28,13 +28,13 @@ class View extends Component {
         dataIndex: 'orderNo',
         key: 'orderNo',
         max: 80,
-      }, 
+      },
       {
         title: '发货地址',
         dataIndex: 'address',
         key: 'address',
       },
-      { 
+      {
         title: '订单状态',
         dataIndex: 'orderStatus',
         search: true,
@@ -47,7 +47,7 @@ class View extends Component {
           const statusValue = statusObj[statusName];
           return statusValue;
         },
-      }, 
+      },
       {
         title: '发货人电话',
         dataIndex: 'phone',
@@ -63,7 +63,7 @@ class View extends Component {
         key: 'driverName',
         search: true,
         max: 20,
-      }, 
+      },
       {
         title: '司机电话',
         dataIndex: 'driverPhone',
@@ -72,19 +72,16 @@ class View extends Component {
         max: 11,
         number: true,
         hidden: true,
-      }, 
+      },
       {
         title: '收货商家名称',
         dataIndex:'receiverShopName',
         max: 50,
         render: (text, record) => {
           const name = record && record.receiversInfoList.length === 1 ? record.receiversInfoList[0].shopName : '';
-          return record.receiversInfoList.length > 1 
+          return record.receiversInfoList.length > 1
             ? `${record.receiversInfoList[0].shopName}...`
             : name;
-          // record.receiversInfoList.length > 1 
-          //   ? `${record.receiversInfoList[0].shopName}...` : record && record.receiversInfoList.length === 1
-          //     ? record.receiversInfoList[0].shopName : ''
         },
       },
       {
@@ -95,9 +92,6 @@ class View extends Component {
           const address = record.receiversInfoList.length === 1 ? record.receiversInfoList[0].address : '';
           return record.receiversInfoList.length > 1
             ? `${record.receiversInfoList[0].address}...` : address;
-          // record.receiversInfoList.length > 1 
-          //   ? `${record.receiversInfoList[0].address}...` : record && record.receiversInfoList.length === 1
-          //     ? record.receiversInfoList[0].address : ''
         },
       },
       {
@@ -111,7 +105,7 @@ class View extends Component {
         title: '下单时间',
         dataIndex:'orderTime',
         render: (text, record) => (
-          record.orderStatus !== 6 
+          record.orderStatus !== 6
             ? formatDate(Number(text), 'yyyy-MM-dd HH:mm')
             : ''
         ),
@@ -124,12 +118,12 @@ class View extends Component {
             {
               record.orderStatus === 6 &&
               <Link
-                to={`/Manage/AddDistribution/${data[index].orderNo}`} 
+                to={`/Manage/AddDistribution/${data[index].orderNo}`}
                 className="add-btn ant-btn ant-btn-primary Distribution-edit-btn"
               >编辑</Link>
             }
             {
-              record.orderStatus === 6 && 
+              record.orderStatus === 6 &&
               <Button
                 type="primary"
                 className="Distribution-delete-btn"
@@ -151,17 +145,17 @@ class View extends Component {
                 }
               >删除</Button>
             }
-            { 
+            {
               record.orderStatus !== 6 &&
               <Link
-                to={`/Manage/DistributionDetail/${data[index].orderNo}`} 
+                to={`/Manage/DistributionDetail/${data[index].orderNo}`}
                 className="add-btn ant-btn ant-btn-primary Distribution-detail-btn"
               >明细</Link>
             }
             {
               record.orderStatus === 1 &&
               <Link
-                to={`/Manage/ChooseDriver/${data[index].orderNo}`} 
+                to={`/Manage/ChooseDriver/${data[index].orderNo}`}
                 className="add-btn ant-btn ant-btn-primary Distribution-dispatch-btn"
               >派单</Link>
             }

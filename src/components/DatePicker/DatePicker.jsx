@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { DatePicker } from 'antd';
+import { DatePicker as AntdDatePicker } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-export default class CommonDatePicker extends Component {
+export default class DatePicker extends Component {
   static propTypes = {
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -40,7 +40,7 @@ export default class CommonDatePicker extends Component {
 
   render() {
     return (
-      <DatePicker
+      <AntdDatePicker
         {...this.props}
         value={this.state.value}
         onChange={this.handleChange.bind(this)}

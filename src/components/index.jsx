@@ -353,7 +353,7 @@ export const createFormItem = (opts) => {
     if (field.ID) {
       rules.push({
         pattern: new RegExp(
-          `${/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|/.source 
+          `${/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|/.source
           }${/(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.source}`
         ),
         message: '身份证格式有误',
@@ -508,7 +508,7 @@ export const createFormItem = (opts) => {
             form.getFieldDecorator(field.name, {
               valuePropName: field.type === 'switch' ? 'checked' : 'value',
               rules,
-              initialValue: field.initialValue,
+              initialValue: field.initialValue || field.value,
             })(geneBox(field, inputOpts))
           }
         </FormItem>

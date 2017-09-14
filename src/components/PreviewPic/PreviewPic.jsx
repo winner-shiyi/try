@@ -23,20 +23,25 @@ class PreviewPic extends Component {
       width,
       height,
     } = this.props;
+    const imageBoxStyle = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    };
 
     const { previewVisible, previewImage } = this.state;
     return (
       <div className="previewPic-component">
-        <div className="imgae-box clearfix">
+        <div className="imgae-box clearfix" style={imageBoxStyle}>
           {
             imagrUrlArr.map((item, index) => {
               const imgAlt = `图片备注${index}`;
               const key = `img-s${index}`;
-              return (<PreviewPicItem 
-                src={item} 
-                alt={imgAlt} 
-                width={width} 
-                height={height} 
+              return (<PreviewPicItem
+                src={item}
+                alt={imgAlt}
+                width={width}
+                height={height}
                 key={key}
                 onClick={this.handlePreview}
                 id={index}

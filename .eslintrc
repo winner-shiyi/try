@@ -1,9 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extends": [
-    "standard",
-    "standard-react"
-  ],
+  "extends": "airbnb",
   "plugins": [
     "babel",
     "react",
@@ -15,6 +12,7 @@
   "globals": {
     "__DEV__"      : false,
     "__TEST__"     : false,
+    "__RELEASE__"  : false,
     "__PROD__"     : false,
     "__UAT__"      : false,
     "__DEVREMOTE__": false,
@@ -25,7 +23,7 @@
     "jsx-quotes" : [2, "prefer-double"],
     "max-len" : [2, 120, 2],
     "object-curly-spacing" : [2, "always"],
-    "no-trailing-spaces": 0,
+    "no-trailing-spaces": 2,
     "comma-dangle": [2, "always-multiline"],
     "react/jsx-no-bind": 0,
     "react/prop-types": 0,
@@ -35,7 +33,6 @@
     "no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true, "allowTaggedTemplates": true }],
     "no-param-reassign": 1,
     "arrow-parens": [2, "always"],
-    "react/prefer-stateless-function": 0,
-    "semi": [0, "always"]
+    "react/prefer-stateless-function": 0
   }
 }

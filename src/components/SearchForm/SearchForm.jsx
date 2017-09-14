@@ -121,9 +121,9 @@ class AdvancedSearchForm extends Component {
 
   handleReset = () => {
     if (this.props.reset) {
-      this.props.reset();
+      this.props.reset(); // 如果没有走清空搜索字段的action的话
     } else {
-      this.props.form.resetFields();
+      this.props.form.resetFields(); // antd 自带的清空搜索字段方法
     }
   }
 

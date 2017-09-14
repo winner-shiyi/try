@@ -50,7 +50,6 @@ class DistributionDetailForm extends Component {
         const item = itemTemp;
         let theBooleans = [item.hasArrived, item.hasLeft, item.receiverFlag];
         theBooleans = theBooleans.join();
-        
         let newItem;
         let newItem2;
         if (theBooleans === [true, true, true].toString()) {
@@ -82,7 +81,7 @@ class DistributionDetailForm extends Component {
           };
           cardArray.push(newItem);
           cardArray.push(newItem2);
-        } else if (theBooleans === [true, false, true].toString()) { // receiverFlag true 
+        } else if (theBooleans === [true, false, true].toString()) {
           newItem = {
             clockSort:index,
             node:`到达收货地：${item.shopName}`,
@@ -124,46 +123,52 @@ class DistributionDetailForm extends Component {
 
     /**
      * 收货信息表格
-     * @param {*} customerfields 
+     * @param {*} customerfields
      */
     const customerInfo = (customerfields) => {
-      const columns = [{
-        title: '收货商家名称',
-        dataIndex: 'shopName',
-        key: 'shopName',
-      }, {
-        title: '收货地址',
-        dataIndex: 'address',
-        key:'address',
-      }, {
-        title: '收货联系电话',
-        dataIndex: 'phone',
-        key: 'phone',
-      }, {
-        title: '收货状态',
-        dataIndex: 'receiverStatus',
-        key: 'receiverStatus',
-        render: (text, record) => {
-          const textStatus = ['未处理', '已妥投', '未妥投'];
-          return textStatus[Number(record.receiverStatus - 1)];
+      const columns = [
+        {
+          title: '收货商家名称',
+          dataIndex: 'shopName',
+          key: 'shopName',
         },
-      }, {
-        title: '文字备注',
-        dataIndex: 'textTip',
-        key: 'textTip',
-      }, {
-        title: '图片备注',
-        dataIndex: 'imageTip',
-        key: 'imageTip',
-        render: (text, record, index) => (
-          <div>
-            {
-              record.imageTip && record.imageTip.length > 0 &&
-              <PreviewPic imagrUrlArr={record.imageTip} width={50} height={50} key={index} />
-            }
-          </div>
-        ),
-      },
+        {
+          title: '收货地址',
+          dataIndex: 'address',
+          key:'address',
+        },
+        {
+          title: '收货联系电话',
+          dataIndex: 'phone',
+          key: 'phone',
+        },
+        {
+          title: '收货状态',
+          dataIndex: 'receiverStatus',
+          key: 'receiverStatus',
+          render: (text, record) => {
+            const textStatus = ['未处理', '已妥投', '未妥投'];
+            return textStatus[Number(record.receiverStatus - 1)];
+          },
+        },
+        {
+          title: '文字备注',
+          dataIndex: 'textTip',
+          key: 'textTip',
+        },
+        {
+          title: '图片备注',
+          dataIndex: 'imageTip',
+          key: 'imageTip',
+          render: (text, record, index) => (
+            <div>
+              {
+                record.imageTip && record.imageTip.length > 0 &&
+                <PreviewPic imagrUrlArr={record.imageTip} width={50} height={50} key={index} />
+              }
+            </div>
+          ),
+        },
       ];
       return (
         <div style={{ marginTop:'20px' }} >
@@ -173,7 +178,7 @@ class DistributionDetailForm extends Component {
     };
     /**
      * 订单信息表格
-     * @param {*} orderfields 
+     * @param {*} orderfields
      */
     const orderForm = (orderfields) => (
       <Scrollbars
@@ -206,7 +211,7 @@ class DistributionDetailForm extends Component {
     );
     /**
      * 司机信息表格
-     * @param {*} driverfields 
+     * @param {*} driverfields
      */
     const driverForm = (driverfields) => (
       <div>
@@ -241,10 +246,9 @@ class DistributionDetailForm extends Component {
         </Scrollbars>
       </div>
     );
-    
     /**
      * 打卡信息表格
-     * @param {*} clockData 
+     * @param {*} clockData
      */
     const clockForm = (clockData) => {
       const columns = [
@@ -252,17 +256,17 @@ class DistributionDetailForm extends Component {
           title: '排线次序',
           dataIndex: 'clockSort',
           key: 'clockSort',
-        }, 
+        },
         {
           title: '打卡节点',
           dataIndex: 'node',
           key: 'node',
-        }, 
+        },
         {
           title: '打卡时间',
           dataIndex: 'time',
           key:'time',
-        }, 
+        },
         {
           title: '停留时间',
           dataIndex: 'stopTime',

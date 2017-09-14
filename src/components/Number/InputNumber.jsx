@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { InputNumber } from 'antd';
+import { InputNumber as AntdInputNumber } from 'antd';
 import PropTypes from 'prop-types';
 import { formatMoney } from '../../util';
 
-
-export default class CommonNumber extends Component {
+export default class InputNumber extends Component {
   static propTypes = {
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -33,16 +32,6 @@ export default class CommonNumber extends Component {
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       const value = typeof (nextProps.value) === 'number' ? (nextProps.value) : (nextProps.value || undefined);
-      let max = this.props.max;
-      if (typeof max === 'undefined') {
-        max = 10000000000000000;
-      }
-      // if (+value > max) {
-      //   value = this.state.value
-      // }
-      // if (value === 'undefined') {
-      //   value = undefined // when blur, the value is string undefined?
-      // }
       this.setState({ value });
     }
   }
@@ -61,7 +50,7 @@ export default class CommonNumber extends Component {
     } = this.props;
 
     return (
-      <InputNumber
+      <AntdInputNumber
         disabled={disabled}
         max={+max}
         min={(typeof min === 'number' ? min : +min) || undefined}
@@ -101,12 +90,6 @@ export default class CommonNumber extends Component {
             }
           }
           value = (`${value}`).replace(/,/g, '');
-          // if (+value > max || +value < min) {
-          //   value = me.state.value
-          // }
-          // if (typeof min !== 'undefined' && +min >= 0) {
-          //   value = value.replace(/\-/g, '')
-          // }
           return value;
         }}
       />

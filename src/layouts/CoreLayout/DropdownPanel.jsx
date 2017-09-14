@@ -23,7 +23,7 @@ class DropdownPanel extends Component {
           <a>修改密码</a>
         </Menu.Item>
         <Menu.Item key="3">
-          <a 
+          <a
             tabIndex={0}
             role="button"
             onClick={(() => {

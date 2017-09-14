@@ -33,7 +33,7 @@ class SideMenu extends Component {
     //   })
     //   matchMenu && this.props.menuOpen([matchMenu.id + ''])
     // })
-  } 
+  }
 
   onClick({ key }) {
     this.props.clickMenuItem(key);
@@ -95,7 +95,7 @@ class SideMenu extends Component {
                       {subItems}
                     </SubMenu>
                   );
-                } 
+                }
                 return '';
               };
 

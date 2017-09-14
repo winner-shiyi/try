@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import moment from 'moment';
-import { Input, Button, Form, Icon } from 'antd';
+import { Input, Button, Form } from 'antd';
 
 const FormItem = Form.Item;
 
-class YearInput extends Component {
-  hasErrors(fieldsError) {
-    return Object.keys(fieldsError).some((field) => fieldsError[field]);
-  }
+class YearInputTemp extends Component {
+  // hasErrors(fieldsError) {
+  //   return Object.keys(fieldsError).some((field) => fieldsError[field]);
+  // }
 
   handleSearch = (e) => {
     e.preventDefault();
@@ -19,7 +18,7 @@ class YearInput extends Component {
   }
 
   render() {
-    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+    const { getFieldDecorator, getFieldError, isFieldTouched } = this.props.form;
     const yearError = isFieldTouched('year') && getFieldError('year');
 
     return (
@@ -51,6 +50,6 @@ class YearInput extends Component {
   }
 }
 
-YearInput = Form.create()(YearInput);
+const YearInput = Form.create()(YearInputTemp);
 
 export default YearInput;

@@ -34,11 +34,6 @@ export default class CheckboxGroup extends Component {
   }
 
   onCheckAllChange(e) {
-    // this.setState({
-    //   checkedList: e.target.checked ? this.props.options : [],
-    //   indeterminate: false,
-    //   checkAll: e.target.checked,
-    // });
     this.props.onChange(e.target.checked ? this.props.options.map((item) => item.value || item) : []);
   }
 
@@ -72,7 +67,7 @@ export default class CheckboxGroup extends Component {
                   style={{ marginLeft: '16px', width: '100px', display: 'inline-block' }}
                 >{item.label}</span>
               );
-            } 
+            }
             return '';
           }) : <span style={{ marginLeft: '16px' }}>-</span>
         }

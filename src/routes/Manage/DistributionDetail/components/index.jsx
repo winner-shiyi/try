@@ -7,7 +7,6 @@ class View extends Component {
   componentDidMount() {
     const { props } = this;
     const id = props.params.id;
-    // console.log(id);
     props.Detail({ orderNo : id }).then(
       () => {
         if (this.props.orderStatus !== '待分配') {
@@ -23,8 +22,6 @@ class View extends Component {
       data,
       params,
     } = this.props;
-
-    // console.log(data);
 
     const orderInfo = [
       { label: '订单编号', name: 'orderNo', className: 'xg', simpleList: true, disabled: true },
@@ -73,14 +70,14 @@ class View extends Component {
         </Row>
         <Row><h3 style={{ marginTop: '20px', marginBottom: '20px', textAlign:'center', fontSize: '16px' }}>
           {orderStatus}</h3></Row>
-        <DistributionDetail 
-          receiversInfoList={data.receiversInfoList} 
-          orderInfo={orderInfo} 
-          orderStatus={orderStatus} 
-          paramsId={params.id} 
-          fields={fields} 
-          values={data} 
-          clockData={clockData} 
+        <DistributionDetail
+          receiversInfoList={data.receiversInfoList}
+          orderInfo={orderInfo}
+          orderStatus={orderStatus}
+          paramsId={params.id}
+          fields={fields}
+          values={data}
+          clockData={clockData}
         />
       </div>
     );

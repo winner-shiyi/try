@@ -76,7 +76,7 @@ const ACTION_HANDLERS = {
 
 const initialState = {
 };
-export default function dictReducer(state = initialState, action) {
+export default function dictReducer(state = initialState, action = {}) {
   const handler = ACTION_HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;

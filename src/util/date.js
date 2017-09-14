@@ -16,14 +16,12 @@ export default function formatDate(value, format) {
     ss(d) { return fix(d.getSeconds()); },
   };
 
-  const chunk = new RegExp(Object.keys(maps).join('|'), 'g');  
+  const chunk = new RegExp(Object.keys(maps).join('|'), 'g');
 
   function formatDateInside(valueTemp, formatTemp) {
-    let value1 = valueTemp;
-    let format1 = formatTemp;
-    format1 = format || 'yyyy-MM-dd HH:mm:ss';
-    value1 = new Date(value1);
-    return format1.replace(chunk, (capture) => (maps[capture] ? maps[capture](value1) : ''));
+    const formatTempvalue = formatTemp || 'yyyy-MM-dd HH:mm:ss';
+    const valueTempValue = new Date(valueTemp);
+    return formatTempvalue.replace(chunk, (capture) => (maps[capture] ? maps[capture](valueTempValue) : ''));
   }
 
   return formatDateInside(value, format);

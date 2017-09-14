@@ -3,7 +3,7 @@ import locationReducer from './location';
 import commonReducer from './common';
 import dictReducer from './dict';
 
-const makeRootReducer = (asyncReducers) => 
+const makeRootReducer = (asyncReducers) =>
   // 合并
   combineReducers({
     // locationreducer 返回变化后的路径地址
