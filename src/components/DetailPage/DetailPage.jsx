@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Input, Button, Spin } from 'antd';
-import { createFormItem } from '../../components';
+import { createFormItem, mapPropsToFields, onFieldsChange } from '../../components';
 
 const FormItem = Form.Item;
 
@@ -19,18 +19,18 @@ class DetailPage extends Component {
     } = this.props;
     const butt = buttons.map((item, index) => {
       const key = `button${index}`;
-      const { hidden } = item;
+      const { hidden, style, type, handleForm, onClick, disabled, label } = item;
       if (!hidden) {
         return (
           <Button
-            style={item.style}
+            style={style}
             key={key}
-            type={item.type || 'primary'}
-            onClick={(item.handleForm || item.onClick).bind(this, form)}
-            disabled={item.disabled}
+            type={type || 'primary'}
+            onClick={(handleForm || onClick).bind(this, form)}
+            disabled={disabled}
             loading={item.loading}
           >
-            { item.label }
+            { label }
           </Button>
         );
       }
@@ -93,38 +93,7 @@ class DetailPage extends Component {
 }
 
 export default Form.create({
-  mapPropsToFields(props) {
-    let res = {};
-    const keys = Object.keys(props.values || {});
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      const param = props.values[key];
-      if (typeof param === 'object' && 'value' in param) {
-        res[key] = param;
-      } else {
-        res[key] = { value: param };
-      }
-    }
-    if (props.mapFields) {
-      res = {
-        ...res,
-        ...props.mapFields(res),
-      };
-    }
-    return res;
-  },
-  onFieldsChange(props, fieldsTemp) {
-    const fields = fieldsTemp;
-    const keys = Object.keys(fields || {});
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      const fld = props.fields.find((item) => item.name === fields[key].name);
-      fields[key].type = fld && fld.type;
-    }
-    props.changeRecord && props.changeRecord({
-      ...props.values,
-      ...fields,
-    });
-  },
+  mapPropsToFields,
+  onFieldsChange,
 })(DetailPage);
 

@@ -28,6 +28,6 @@ export default function formatDate(value, format) {
 }
 /**
  * 使用方法
+ * new Date('2017-08 02:14').getTime()
+ * formatDate(1501697640000,'yyyy-MM-dd HH:mm')
  */
-// new Date('2017-08 02:14').getTime()
-// formatDate(1501697640000,'yyyy-MM-dd HH:mm')

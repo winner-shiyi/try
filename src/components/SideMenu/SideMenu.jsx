@@ -66,7 +66,7 @@ class SideMenu extends Component {
         >
           {
             menuData[0].map((pItem) => {
-              const subMapItems = menuData[1].map((item) => { // TODO
+              const subMapItems = menuData[1].map((item) => {
                 if (pItem.id === item.parentId) {
                   return (
                     <Menu.Item key={item.id}>

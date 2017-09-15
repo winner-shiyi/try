@@ -6,7 +6,7 @@ import {
   Button,
 } from 'antd';
 import PropTypes from 'prop-types';
-import { createFormItem } from '../../components';
+import { createFormItem, mapPropsToFields, onFieldsChange } from '../../components';
 import './SearchForm.scss';
 
 const FormItem = Form.Item;
@@ -61,7 +61,7 @@ class AdvancedSearchForm extends Component {
         const keys = Object.keys(values || {});
         for (let i = 0; i < keys.length; i += 1) {
           const key = keys[i];
-          const field = fields.find((value) => // TODO
+          const field = fields.find((value) =>
             (value.name || value.dataIndex) === key
           );
           switch (field.type) {
@@ -183,33 +183,8 @@ class AdvancedSearchForm extends Component {
 }
 
 const WrappedAdvancedSearchForm = Form.create({
-  mapPropsToFields(props) {
-    const res = {};
-    const keys = Object.keys(props.searchParams || {});
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      const param = props.searchParams[key];
-      if (typeof param === 'object' && !(param instanceof Array)) {
-        res[key] = param;
-      } else {
-        res[key] = { value: param };
-      }
-    }
-    return res;
-  },
-  onFieldsChange(props, fieldsTemp) {
-    const fields = fieldsTemp;
-    const keys = Object.keys(fields || {});
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      const fld = props.fields.find((item) => item.name === fields[key].name);
-      fields[key].type = fld && fld.type;
-    }
-    props.changeSearch && props.changeSearch({
-      ...props.searchParams,
-      ...fields,
-    });
-  },
+  mapPropsToFields,
+  onFieldsChange,
 })(AdvancedSearchForm);
 
 export default WrappedAdvancedSearchForm;

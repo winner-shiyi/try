@@ -2,7 +2,7 @@ import { message } from 'antd';
 import { createAction, isResultSuccessful } from '../../../../util';
 import fetch from '../../../../../lib/fetch';
 import addr from '../../../../../public/mock/addr2.json';
-import formatDate from '../../../../util/date';
+import formatDate from '../../../../util/formatDate';
 
 // ------------------------------------
 // Constants
@@ -116,7 +116,6 @@ const receiverSearch = (params) => (dispatch) => {
       }
       dispatch(receiverSearchFailure(resultDesc));
       throw new Error(`Error occurs in AddDistribution:receiverSearch, ${resultCode}:${resultDesc}`);
-      // return false;
     });
 };
 
@@ -174,8 +173,8 @@ function initUUID(name, numId, prefix = '', suffix = 'suffix') {
 }
 /**
  * 初始化initialState中的receiverFields
- * @param {*} id 
- * @param {*} extFields 
+ * @param {*} id
+ * @param {*} extFields
  */
 function createFieldModel(id = 0, extFields = []) {
   const fields = Object.assign(
@@ -570,16 +569,13 @@ const ACTION_HANDLERS = {
   /**
    * 表单数据改变更新
    */
-  [ADDDISTRIBUTION_RECORD_CHANGE]: (state, action) => {
-    const newState = {
-      ...state,
-      record: {
-        ...state.record,
-        ...action.fields,
-      },
-    };
-    return newState;
-  },
+  [ADDDISTRIBUTION_RECORD_CHANGE]: (state, action) => ({
+    ...state,
+    record: {
+      ...state.record,
+      ...action.fields,
+    },
+  }),
 
   /**
    * 清空数据，回到初始界面

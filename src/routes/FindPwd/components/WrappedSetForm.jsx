@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'antd';
-import { createFormItem } from './index';
+import { createFormItem } from '../../index';
 
 const FormItem = Form.Item;
 

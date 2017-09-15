@@ -6,7 +6,7 @@ import { browserHistory } from 'react-router';
 import { Form, Input, Row, Table, Button } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { createFormItem } from '../../../../components';
-import formatDate from '../../../../util/date';
+import formatDate from '../../../../util/formatDate';
 import difftime from '../../../../util/difftime';
 import PreviewPic from '../../../../components/PreviewPic';
 

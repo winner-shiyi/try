@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import fetch from '../../../../../lib/fetch';
-import formatDate from '../../../../util/date';
+import formatDate from '../../../../util/formatDate';
 
 // ------------------------------------
 // Constants
@@ -84,7 +84,6 @@ const ACTION_HANDLERS = {
       3:'厢式',
       4:'冷链',
     };
-    // let carType;
     newState.data = Object.assign({}, newState.data, data);
     newState.data = Object.assign({}, newState.data, {
       carType:dictionary[data.carType],

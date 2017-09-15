@@ -65,8 +65,8 @@ export default class OrderListPage extends Component {
         <SearchForm
           fields={columns.filter((item) => !!item.search)}
           search={search}
-          changeSearch={changeSearch}
-          searchParams={searchParams}
+          changeRecord={changeSearch}
+          values={searchParams}
           page={page}
           reset={reset}
         />

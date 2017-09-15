@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'antd';
 import { Link } from 'react-router';
 import OrderListPage from '../../../../components/OrderListPage';
-import formatDate from '../../../../util/date';
+import formatDate from '../../../../util/formatDate';
 import './style.scss';
 
 class View extends Component {

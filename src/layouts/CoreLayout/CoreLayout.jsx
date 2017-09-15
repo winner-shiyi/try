@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import SideMenu from '../../components/SideMenu';
 import '../../styles/core.scss';
 import './CoreLayout.scss';
-import ChangePwdFormWrapper from './PwdForm';
-import TopMenuWrapper from './TopMenu';
+import ChangePwdFormWrapper from './ChangePwdFormWrapper';
+import TopMenuWrapper from './TopMenuWrapper';
 
 const { Content, Sider } = Layout;
 
@@ -25,7 +25,7 @@ class CoreLayout extends Component {
             <div className="logo-wrapper flex flex-v flex-c">
               <div className="logo"><img alt="" src="/tobobo_logo.png" style={{ height: 150 }} /></div>
               <div className="logo-title">{JSON.parse(sessionStorage.getItem('storeName'))}</div>
-              <div className="logo-title">兔波波门店工作台</div>
+              <div className="logo-title">兔波波车配管理后台</div>
             </div>
             <SideMenu />
           </layout>

@@ -1,4 +1,7 @@
 // We only need to import the modules necessary for initial render
+import React from 'react';
+import { Input, Icon } from 'antd';
+import Captcha from '../components/Captcha';
 import Home from './Home';
 import SignInRoute from './SignIn';
 import FindPwdRoute from './FindPwd';
@@ -31,6 +34,51 @@ const createRoutes = (store) => ({
     FindPwdRoute(store),
   ],
 });
+const createInput = (opts) => {
+  switch (opts.type) {
+    case 'captcha':
+      return (
+        <Captcha
+          placeholder={opts.label}
+          onClick={opts.onClick}
+          icon={opts.icon}
+        />
+      );
+    case 'text':
+    case 'password':
+      return (
+        <Input prefix={<Icon type={opts.icon} style={{ fontSize: 13 }} />} type={opts.type} placeholder={opts.label} />
+      );
+    default:
+      return (
+        <Input prefix={<Icon type={opts.icon} style={{ fontSize: 13 }} />} type="text" placeholder={opts.label} />
+      );
+  }
+};
+export const createFormItem = (opts) => {
+  const rules = [];
+  if (opts.require) {
+    rules.push({ required: true, message: `请输入${opts.label}` });
+  }
+  if (opts.validator) {
+    rules.push({ validator: opts.validator });
+  }
+  if (opts.max) {
+    rules.push({ max: opts.max, message: `${opts.label}必须小于${opts.max}个字符` });
+  }
+  if (opts.min) {
+    rules.push({ min: opts.min, message: `${opts.label}必须大于${opts.min}个字符` });
+  }
+  if (opts.pattern) {
+    rules.push({ pattern: opts.pattern, message: opts.patternMsg });
+  }
+  if (opts.phone) {
+    rules.push({ pattern: /^1[34578][0-9]{9}$/, message: '请输入正确的手机格式' });
+  }
+  return opts.getFieldDecorator(opts.name, {
+    rules,
+  })(createInput(opts));
+};
 
 /*  Note: childRoutes can be chunked or otherwise loaded programmatically
     using getChildRoutes with the following signature:

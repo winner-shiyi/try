@@ -7,10 +7,8 @@ import {
   Cascader,
   Checkbox,
   Radio,
-  Switch,
 } from 'antd';
 import CommonSelect from './Select';
-import Editor from './Editor';
 import CommonCheckboxGroup from './CheckboxGroup';
 import ImagePicker from './ImagePicker';
 import CommonDatePicker from './DatePicker';
@@ -19,48 +17,69 @@ import MonthRange from './MonthRange';
 import AutoComplete from './Input';
 import InputNumber from './Number';
 import NumberRange from './NumberRange';
+import DateRange from './DateRange';
 
 const CheckboxGroup = Checkbox.Group;
 const FormItem = Form.Item;
 
 const { RangePicker } = DatePicker;
 
-export const geneBox = (fieldTemp, opts = {}) => {
-  const field = fieldTemp;
-  field.dataIndex && (field.name = field.dataIndex);
-  field.title && (field.label = field.title);
+export const geneBox = (field, opts = {}) => {
+  const newField = field;
+  if (field.dataIndex) {
+    newField.name = field.dataIndex;
+  }
+  if (field.title) {
+    newField.label = field.title;
+  }
 
+  // deal with placeholder
+  const phMap = {
+    date: '请选择日期',
+    address: '请选择地址',
+    datetime: '请选择时间',
+    dateRange: ['请选择开始日期', '请选择结束日期'],
+    month: '请选择月份',
+    datetimeRange: ['请选择开始时间', '请选择结束时间'],
+    monthRange: ['请选择开始月份', '请选择结束月份'],
+    select: `请选择${field.label}`,
+  };
+  let placeholder = field.placeholder || phMap[field.type] || `请输入${field.label}`;
+  placeholder = field.disabled ? '-' : placeholder;
+
+  // combine with options from outside
   const defaultOpts = {
     size: 'default',
     ...opts,
-    disabled: field.disabled,
-    name: field.name,
-    label: field.label,
-
+    disabled: newField.disabled,
+    name: newField.name,
+    label: newField.label,
+    placeholder,
   };
-  function disabledDate(current) {
-    // Can not select days before today and today
-    return current && current.valueOf() > Date.now();
-  }
-  switch (field.type) {
+
+  switch (newField.type) {
+    case 'twodateRange':
+      return (
+        <DateRange
+          {...defaultOpts}
+        />
+      );
     case 'date':
       return (
         <CommonDatePicker
           {...defaultOpts}
           format="YYYY-MM-DD"
-          placeholder={field.disabled ? '-' : '请选择日期'}
-          onChange={field.onChange}
-          disabledDate={field.disabledDate}
+          onChange={newField.onChange}
+          disabledDate={newField.disabledDate}
         />
       );
     case 'Cascader':
+    case 'address':
       return (
         <Cascader
           {...defaultOpts}
-          placeholder={field.disabled ? '-' : '请选择地址'}
-          options={field.data}
-          onChange={field.onChange}
-          changeOnSelect={!!field.changeOnSelect}
+          options={newField.data}
+          changeOnSelect={!!newField.changeOnSelect}
         />
       );
     case 'datetime':
@@ -69,23 +88,19 @@ export const geneBox = (fieldTemp, opts = {}) => {
           {...defaultOpts}
           showTime={{ format: 'HH:mm' }}
           format="YYYY-MM-DD HH:mm"
-          placeholder={field.disabled ? '-' : '请选择时间'}
         />
       );
     case 'dateRange':
       return (
         <RangePicker
           {...defaultOpts}
-          disabledDate={disabledDate}
           format="YYYY-MM-DD"
-          placeholder={field.disabled ? '-' : ['请选择开始日期', '请选择结束日期']}
         />
       );
     case 'month':
       return (
         <MonthPicker
           {...defaultOpts}
-          placeholder={field.disabled ? '-' : '请选择月份'}
         />
       );
     case 'datetimeRange':
@@ -94,7 +109,6 @@ export const geneBox = (fieldTemp, opts = {}) => {
           {...defaultOpts}
           showTime={{ format: 'HH:mm' }}
           format="YYYY-MM-DD HH:mm"
-          placeholder={field.disabled ? '-' : ['请选择开始时间', '请选择结束时间']}
         />
       );
     case 'monthRange':
@@ -107,33 +121,30 @@ export const geneBox = (fieldTemp, opts = {}) => {
       return (
         <CommonSelect
           {...defaultOpts}
-          state={field.state}
-          action={field.action}
-          data={field.data}
-          multiple={field.multiple}
-          valueName={field.valueName}
-          displayName={field.displayName}
-          onSelect={field.onSelect}
-          placeholder={field.disabled ? '-' : `请选择${field.labelExtra || field.label}`}
-          filterOption={field.filterOption ? field.filterOption : true}
-          optionFilterProp={field.optionFilterProp}
-          showSearch={field.showSearch}
-          allowClear={!field.required}
-          page={field.page}
+          action={newField.action}
+          data={newField.data}
+          multiple={newField.multiple}
+          valueName={newField.valueName}
+          displayName={newField.displayName}
+          onChange={newField.onChange}
+          onSelect={newField.onSelect}
+          showSearch={newField.showSearch}
+          allowClear={!newField.required}
+          page={newField.page}
         />
       );
-    case 'editor':
-      return (
-        <Editor
-          placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
-        />
-      );
+    // case 'editor':
+    //   return (
+    //     <Editor
+    //       placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
+    //     />
+    //   )
     case 'checkboxGroup':
       return (
         <CommonCheckboxGroup
           {...defaultOpts}
-          label={field.label}
-          options={field.options}
+          label={newField.label}
+          options={newField.options}
         />
       );
     case 'checkbox':
@@ -142,20 +153,12 @@ export const geneBox = (fieldTemp, opts = {}) => {
           {...defaultOpts}
         />
       );
-    case 'switch':
-      return (
-        <Switch
-          checkedChildren={field.checkedChildren}
-          unCheckedChildren={field.unCheckedChildren}
-          {...defaultOpts}
-        />
-      );
     case 'image':
       return (
         <ImagePicker
           {...defaultOpts}
-          data={field.data}
-          tokenSeparators={field.tokenSeparators}
+          data={newField.data}
+          tokenSeparators={newField.tokenSeparators}
         />
       );
     case 'password':
@@ -163,18 +166,15 @@ export const geneBox = (fieldTemp, opts = {}) => {
         <Input
           type="password"
           {...defaultOpts}
-          placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
         />
       );
     case 'number':
-      // const min = typeof field.min === 'number' ? field.min : undefined;
       return (
         <InputNumber
           {...defaultOpts}
-          max={field.max || 1000000000000000} // 16 or 99...
-          min={typeof field.min === 'number' ? field.min : undefined}
-          money={field.money}
-          placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
+          max={newField.max || 1000000000000000} // 16 or 99...
+          min={typeof newField.min === 'number' ? newField.min : undefined}
+          money={newField.money}
         />
       );
     case 'textarea':
@@ -182,26 +182,16 @@ export const geneBox = (fieldTemp, opts = {}) => {
         <Input
           type="textarea"
           {...defaultOpts}
-          placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
-          autosize={field.disabled ? true : { minRows: 2, maxRows: 6 }}
-          onChange={field.onChange}
+          autosize={newField.disabled ? true : { minRows: 2, maxRows: 6 }}
         />
-      );
-    case 'span':
-      return (
-        <a
-          role="button"
-          tabIndex={0}
-          onClick={field.onClick || ''}
-        >{field.spanName || field.label || field.name}</a>
       );
     case 'radio':
       return (
         <Radio.Group
-          onChange={field.onChange}
+          onChange={newField.onChange}
         >
           {
-            field.data.map((item) => <Radio value={item[0]} key={item[0]}>{item[1]}</Radio>)
+            newField.data.map((item) => <Radio value={item[0]} key={item[0]}>{item[1]}</Radio>)
           }
 
         </Radio.Group>
@@ -210,10 +200,10 @@ export const geneBox = (fieldTemp, opts = {}) => {
       return (
         <NumberRange
           {...defaultOpts}
-          startMin={field.startMin}
-          endMin={field.endMin}
-          startMax={field.startMax}
-          endMax={field.endMax}
+          startMin={newField.startMin}
+          endMin={newField.endMin}
+          startMax={newField.startMax}
+          endMax={newField.endMax}
         />
       );
     default:
@@ -221,13 +211,12 @@ export const geneBox = (fieldTemp, opts = {}) => {
         <AutoComplete
           {...defaultOpts}
           allowClear
-          dataSource={field.dataSource}
-          onChange={field.onChange}
-          onSelect={field.onSelect}
-          onFocus={field.onFocus}
-          placeholder={field.disabled ? '-' : `请输入${field.labelExtra || field.label}`}
-          buttonText={field.buttonText}
-          buttonClick={field.buttonClick}
+          buttonText={newField.buttonText}
+          buttonClick={newField.buttonClick}
+          dataSource={newField.dataSource}
+          onChange={newField.onChange}
+          onSelect={newField.onSelect}
+          onFocus={newField.onFocus}
         />
       );
   }
@@ -251,23 +240,16 @@ export const createFormItem = (opts) => {
     form,
     inputOpts,
   } = opts;
-
-  // if (!opts.formItemLayout) {
-  //   formItemLayout = {
-  //     labelCol: {
-  //       span: 6,
-  //     },
-  //     wrapperCol: {
-  //       span: 18,
-  //     },
-  //   };
-  // }
-
   inputOpts.form = form;
-  field.dataIndex && (field.name = field.dataIndex);
-  field.title && (field.label = field.title);
-  !field.max && !field.type && (field.max = 120);
-
+  if (field.dataIndex) {
+    field.name = field.dataIndex;
+  }
+  if (field.title) {
+    field.label = field.title;
+  }
+  if (!field.max && !field.type) {
+    field.max = 120;
+  }
   const rules = [];
   if (field.hidden && !field.search) {
     rules.push({
@@ -284,7 +266,7 @@ export const createFormItem = (opts) => {
       if (['date', 'datetime', 'dateRange', 'datetimeRange', 'select'].indexOf(field.type) > -1) {
         msgPefix = '请选择';
       }
-      if (field.type === 'image') {
+      if (field.type === 'IDPhotoGroup' || field.type === 'image') {
         msgPefix = '请上传图片';
       }
 
@@ -303,15 +285,17 @@ export const createFormItem = (opts) => {
       rules.push({ validator: field.validator });
     }
     if (field.max && field.type !== 'number') {
-      rules.push({ max: field.max,
+      rules.push({
+        max: field.max,
         message: `${msgLabel}必须小于${field.max}个字符`,
         transform: (v) => {
-          let vTemp = v;
-          if (typeof v === 'number') {
-            vTemp += '';
+          let newV = v;
+          if (typeof newV === 'number') {
+            newV += '';
           }
-          return vTemp;
-        } });
+          return newV;
+        },
+      });
     } else if (field.max && field.type === 'number') {
       rules.push({ validator: (rule, value, callback) => {
         if (value && field.max < +value) {
@@ -321,15 +305,17 @@ export const createFormItem = (opts) => {
       } });
     }
     if (field.min && field.type !== 'number') {
-      rules.push({ min: field.min,
+      rules.push({
+        min: field.min,
         message: `${msgLabel}必须大于${field.min}个字符`,
         transform: (v) => {
-          let vTemp = v;
-          if (typeof vTemp === 'number') {
-            vTemp += '';
+          let newV = v;
+          if (typeof newV === 'number') {
+            newV += '';
           }
-          return vTemp;
-        } });
+          return newV;
+        },
+      });
     } else if (field.min && field.type === 'number') {
       rules.push({ validator: (rule, value, callback) => {
         if (value && field.min > +value) {
@@ -385,20 +371,6 @@ export const createFormItem = (opts) => {
     };
   }
 
-  if (field.small) {
-    colSpan = field.small;
-    formItemLayout = field.layoutData || formItemLayout;
-
-    formItemLayout = {
-      labelCol: {
-        span: formItemLayout.labelCol.span / 2,
-      },
-      wrapperCol: {
-        span: 24 - (formItemLayout.labelCol.span / 2),
-      },
-    };
-  }
-
   let styles = {};
   if (!field.search && field.hidden) {
     styles.display = 'none';
@@ -422,7 +394,7 @@ export const createFormItem = (opts) => {
     };
   }
 
-  if (field.type === 'image') {
+  if (field.type === 'IDPhotoGroup' || field.type === 'image') {
     colSpan = 24;
     formItemLayout = {
       labelCol: {
@@ -442,30 +414,6 @@ export const createFormItem = (opts) => {
       },
       wrapperCol: {
         span: 14,
-      },
-    };
-  }
-
-  if (field.simpleHalf) {
-    colSpan = 24;
-    formItemLayout = {
-      labelCol: {
-        span: 3,
-      },
-      wrapperCol: {
-        span: 10,
-      },
-    };
-  }
-
-  if (field.simpleList) {
-    colSpan = 24;
-    formItemLayout = {
-      labelCol: {
-        span: 6,
-      },
-      wrapperCol: {
-        span: 18,
       },
     };
   }
@@ -506,12 +454,52 @@ export const createFormItem = (opts) => {
         >
           {
             form.getFieldDecorator(field.name, {
-              valuePropName: field.type === 'switch' ? 'checked' : 'value',
               rules,
-              initialValue: field.initialValue || field.value,
+              initialValue: field.initialValue,
             })(geneBox(field, inputOpts))
           }
         </FormItem>
       </Col>
   );
+};
+
+// makesure the props.values
+export const mapPropsToFields = (props = {}) => {
+  let res = {};
+  const keys = Object.keys(props.values || {});
+  for (let i = 0; i < keys.length; i += 1) {
+    const key = keys[i];
+    const param = props.values[key];
+    if (typeof param === 'object' && !(param instanceof Array)) {
+      res[key] = param;
+    } else {
+      res[key] = { value: param };
+    }
+  }
+  if (props.mapFields) {
+    res = {
+      ...res,
+      ...props.mapFields(res),
+    };
+  }
+  return res;
+};
+
+// makesure the props.changeRecord
+export const onFieldsChange = (props, flds) => {
+  const fields = flds;
+  const keys = Object.keys(fields || {});
+  const findFun = (name) => {
+    const newName = name;
+    return (item) => item.name === newName;
+  };
+  for (let i = 0; i < keys.length; i += 1) {
+    const key = keys[i];
+    const fld = props.fields.find(findFun(fields[key]));
+    fields[key].type = fld && fld.type;
+  }
+  props.changeRecord && props.changeRecord({
+    ...props.values,
+    ...fields,
+  });
 };

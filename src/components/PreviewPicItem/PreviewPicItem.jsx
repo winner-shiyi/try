@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Icon } from 'antd';
 import './PreviewPicItem.scss';
 
-class PreviewPic extends Component {
+class PreviewPicItem extends Component {
   render() {
     const {
       imagrUrlArr,
@@ -24,5 +24,5 @@ class PreviewPic extends Component {
     );
   }
 }
-export default PreviewPic;
+export default PreviewPicItem;
 

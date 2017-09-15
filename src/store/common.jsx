@@ -54,13 +54,6 @@ function menuSuccess(data) {
   };
 }
 
-// function menuFailure(msg) {
-//   return {
-//     type: MENU_FAILURE,
-//     payload: msg,
-//   };
-// }
-
 function menuOpen(openKeys) {
   return {
     type: MENU_OPEN,
@@ -350,20 +343,6 @@ const ACTION_HANDLERS = {
   },
   [INITIAL_MENU]: (state, action) => {
     let menuTree;
-    // const firstNodes = state.menuData && state.menuData.childList || []
-    // for (let i = 0, fLen = firstNodes.length; i < fLen; i++) {
-    //   let secondNodes = firstNodes[i].childList
-    //   for (let j = 0, sLen = secondNodes.length; j < sLen; j++) {
-    //     let thirdNodes = secondNodes[j].childList
-    //     for (let k = 0, tLen = thirdNodes.length; k < tLen; k++) {
-    //       if (thirdNodes[k].href === action.payload) {
-    //         menuTree = [firstNodes[i], secondNodes[j], thirdNodes[k]]
-    //         // break
-    //       }
-    //       leafMenuData.push(thirdNodes[k])
-    //     }
-    //   }
-    // }
 
     for (let i = 0, len = state.leafMenuData.length; i < len; i += 1) {
       const leafMenu = state.leafMenuData[i];
@@ -427,7 +406,6 @@ const ACTION_HANDLERS = {
     };
   },
   [INIT_COMPANY_FAILURE]: (state) =>
-    // message.error(action.payload)
     ({
       ...state,
     }),

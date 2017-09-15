@@ -38,7 +38,6 @@ export default class ReceiverForm extends Component {
    * 参数：val 表示用户输入的商家名称
    */
   onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]
-    // 过400毫秒以后去请求接口
     clearTimeout(this.timer);
     // 如果商家名称为空则不发送请求，并清空原有填充值
     if (!(`${val}`).trim()) {
@@ -125,7 +124,6 @@ export default class ReceiverForm extends Component {
    */
   reduce(id) {
     this.props.reduceReceiverInfo(id);
-    // this.props.changeRecord(this.props.values);
   }
 
   render() {

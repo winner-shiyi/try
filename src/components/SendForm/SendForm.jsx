@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import { createFormItem } from '../../components';
-import fields from './configFields'; // 新建车配任务表单字段
+import fields from './fields'; // 新建车配任务表单字段
 
 import './SendForm.scss';
 
@@ -38,11 +38,10 @@ export default class SendForm extends Component {
     // }
   }
   /**
-   * 监听发货商家名称输入值变化 
+   * 监听发货商家名称输入值变化
    * 参数：val 表示用户输入的商家名称
    */
   onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]
-    // 过400毫秒以后去请求接口
     clearTimeout(this.timer);
     // 如果商家名称为空则不发送请求，并清空原有填充值
     if (!(`${val}`).trim()) {

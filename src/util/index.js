@@ -6,10 +6,6 @@ export function isResultSuccessful(code) {
 
 export const getFieldsValue = (fields = {}) => {
   const res = {};
-  // for (const i in fields) {
-  //   const param = fields[i];
-  //   res[i] = typeof param === 'object' && !(param instanceof Array) ? param.value : param;
-  // }
   const keys = Object.keys(fields || {});
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i];

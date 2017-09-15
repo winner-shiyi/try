@@ -7,17 +7,19 @@ import './style.scss';
 const { Content, Footer } = Layout;
 
 
-// const args = {
-//   message: 'Tips',
-//   description: <div>
-//     <div>保留用户、权限及一个示例模块</div>
-//     <div>菜单数据为假数据，现不是树形结构，待后期调整</div>
-//     <div>保留真实接口请求</div>
-//     <div>登录用户root/admin</div>
-//   </div>,
-//   duration: 0,
-// }
-// notification.open(args)
+/* 注释
+const args = {
+  message: 'Tips',
+  description: <div>
+    <div>保留用户、权限及一个示例模块</div>
+    <div>菜单数据为假数据，现不是树形结构，待后期调整</div>
+    <div>保留真实接口请求</div>
+    <div>登录用户root/admin</div>
+  </div>,
+  duration: 0,
+}
+notification.open(args)
+*/
 
 export const createFormItem = (opts) => {
   const rules = [];
@@ -43,8 +45,8 @@ class View extends Component {
   login(values) {
     this.props.login(values).then((isSuccess) => {
       isSuccess && browserHistory.push('/Manage');
-      // this.props.initCommon()
-      // isSuccess && this.props.initCompany()
+      // 注释 this.props.initCommon()
+      // 注释 isSuccess && this.props.initCompany()
     });
   }
 

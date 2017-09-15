@@ -3,7 +3,7 @@ import { Layout, Menu, Dropdown, Button } from 'antd';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { common } from '../../store/common';
-import DropdownPanelWrapper from './DropdownPanel';
+import DropdownPanelWrapper from './DropdownPanelWrapper';
 
 const { Header } = Layout;
 

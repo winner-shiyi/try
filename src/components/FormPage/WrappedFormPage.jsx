@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { message, Form, Row, Col, Button, Icon } from 'antd';
 import { browserHistory } from 'react-router';
+import { mapPropsToFields } from '../../components';
 import SendForm from '../SendForm';
 import ReceiverForm from '../ReceiverForm';
 import './FormPage.scss';
@@ -238,27 +239,8 @@ class FormPage extends Component {
   }
 }
 const WrappedFormPage = Form.create({
-  mapPropsToFields(props) {
-    let res = {};
-    const keys = Object.keys(props.values || {});
-    for (let i = 0; i < keys.length; i += 1) { // props.values 拿到的就是上面传下来的【保存填写的表单数据】
-      const key = keys[i];
-      const param = props.values[key];
-      if (typeof param === 'object' && 'value' in param) {
-        res[key] = param;
-      } else {
-        res[key] = { value: param };
-      }
-    }
-    if (props.mapFields) {
-      res = {
-        ...res,
-        ...props.mapFields(res),
-      };
-    }
-    return res;
-  },
-  onFieldsChange(props, flds) {
+  mapPropsToFields,
+  onFieldsChange(props, flds) { // 和共用方法的用不同，需要特殊处理
     const fields = flds;
     const keys = Object.keys(fields || {});
     for (let i = 0; i < keys.length; i += 1) {

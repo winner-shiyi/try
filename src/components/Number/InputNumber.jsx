@@ -40,6 +40,24 @@ export default class InputNumber extends Component {
     this.props.onChange(`${value}`);
   }
 
+  formatter = (val) => {
+    let value = val;
+    if (value) {
+      value = (`${value}`).replace(/[^.\-\d]/g, '');
+      let precision = 0;
+      const valueStr = `${value}`;
+      const index = valueStr.indexOf('.');
+      if (index >= 0) {
+        precision = valueStr.length - valueStr.indexOf('.') - 1;
+      }
+      if (precision > 2) {
+        value = (`${value}`).slice(0, index + 3);
+      }
+    }
+    value = (`${value}`).replace(/,/g, '');
+    return value;
+  }
+
   render() {
     const {
       money,
@@ -58,40 +76,11 @@ export default class InputNumber extends Component {
         money={money}
         onChange={this.handleChange.bind(this)}
         value={this.state.value}
-        formatter={(valueTemp) => {
-          let value = valueTemp;
-          if (value) {
-            value = (`${value}`).replace(/[^.-\d]/g, '');
-            let precision = 0;
-            const valueStr = `${value}`;
-            const index = valueStr.indexOf('.');
-            if (index >= 0) {
-              precision = valueStr.length - valueStr.indexOf('.') - 1;
-            }
-            if (precision > 2) {
-              value = (`${value}`).slice(0, index + 3);
-            }
-          }
-          value = (`${value}`).replace(/,/g, '');
+        formatter={(val) => {
+          const value = this.formatter(val);
           return money ? formatMoney(value) : value;
         }}
-        parser={(valueTemp) => {
-          let value = valueTemp;
-          if (value) {
-            value = (`${value}`).replace(/[^.\-\d]/g, '');
-            let precision = 0;
-            const valueStr = `${value}`;
-            const index = valueStr.indexOf('.');
-            if (index >= 0) {
-              precision = valueStr.length - valueStr.indexOf('.') - 1;
-            }
-            if (precision > 2) {
-              value = (`${value}`).slice(0, index + 3);
-            }
-          }
-          value = (`${value}`).replace(/,/g, '');
-          return value;
-        }}
+        parser={(val) => (this.formatter(val))}
       />
     );
   }

@@ -37,8 +37,8 @@ export default class ListPage extends Component {
   }
 
   render() {
-    const createButton = (btnOpts) => {
-      const res = btnOpts.map((item, index) => {
+    const createButton = (btnOpts) => (
+      btnOpts.map((item, index) => {
         if (!item.hidden) {
           const key = `button${index}`;
           return (
@@ -47,15 +47,13 @@ export default class ListPage extends Component {
               type={item.type || 'primary'}
               onClick={item.onClick.bind(this)}
             >
-
               {item.label}
             </Button>
           );
         }
-        return false;
-      });
-      return res;
-    };
+        return undefined;
+      })
+    );
 
     const {
       title,
@@ -104,8 +102,8 @@ export default class ListPage extends Component {
           <SearchForm
             fields={searchFields || columns.filter((item) => !!item.search)}
             search={search}
-            changeSearch={changeSearch}
-            searchParams={searchParams}
+            changeRecord={changeSearch}
+            values={searchParams}
             page={page}
             reset={reset}
           />

@@ -7,39 +7,14 @@ import {
   Button,
 } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { createFormItem } from '../../components';
+import { createFormItem, mapPropsToFields, onFieldsChange } from '../../components';
 
 
 const FormItem = Form.Item;
 
 const ModalForm = Form.create({
-  mapPropsToFields(props) {
-    const res = {};
-    const keys = Object.keys(props.values || {});
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      const param = props.values[i];
-      if (typeof param === 'object' && !(param instanceof Array)) {
-        res[key] = param;
-      } else {
-        res[key] = { value: param };
-      }
-    }
-    return res;
-  },
-  onFieldsChange(props, fieldsTemp) {
-    const fields = fieldsTemp;
-    const keys = Object.keys(fields || {});
-    for (let i = 0; i < keys.length; i += 1) {
-      const key = keys[i];
-      const fld = props.fields.find((item) => item.name === fields[key].name);
-      fields[key].type = fld && fld.type;
-    }
-    props.changeRecord && props.changeRecord({
-      ...props.values,
-      ...fields,
-    });
-  },
+  mapPropsToFields,
+  onFieldsChange,
 })(
   (props) => {
     const {
