@@ -27,7 +27,7 @@ class View extends Component {
         search: true,
         dataIndex: 'orderNo',
         key: 'orderNo',
-        max: 80,
+        max: 50,
       },
       {
         title: '发货地址',

@@ -80,6 +80,7 @@ export const geneBox = (field, opts = {}) => {
           {...defaultOpts}
           options={newField.data}
           changeOnSelect={!!newField.changeOnSelect}
+          onChange={newField.onChange}
         />
       );
     case 'datetime':
@@ -183,6 +184,7 @@ export const geneBox = (field, opts = {}) => {
           type="textarea"
           {...defaultOpts}
           autosize={newField.disabled ? true : { minRows: 2, maxRows: 6 }}
+          onChange={field.onChange}
         />
       );
     case 'radio':
@@ -405,7 +407,6 @@ export const createFormItem = (opts) => {
       },
     };
   }
-
   if (field.simple) {
     colSpan = 24;
     formItemLayout = {
@@ -414,6 +415,17 @@ export const createFormItem = (opts) => {
       },
       wrapperCol: {
         span: 14,
+      },
+    };
+  }
+  if (field.simpleList) { // 车配任务详情页需要的配置
+    colSpan = 24;
+    formItemLayout = {
+      labelCol: {
+        span: 6,
+      },
+      wrapperCol: {
+        span: 18,
       },
     };
   }

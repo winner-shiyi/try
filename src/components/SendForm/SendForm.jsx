@@ -119,7 +119,7 @@ export default class SendForm extends Component {
   }
 
   render() {
-    // 下面是绑定发货商家名称这个表单的onChange,onSelect事件 配置dataSource
+    // 下面是绑定发货商家名称这个表单的onChange、onSelect事件、配置dataSource
     fields[0].onChange = this.onShopNameChange;
     fields[0].onSelect = this.onSelect;
     fields[0].dataSource = this.state.dataSource;

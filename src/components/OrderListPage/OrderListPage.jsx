@@ -19,7 +19,7 @@ export default class OrderListPage extends Component {
     searchParams: PropTypes.object,
     page: PropTypes.object,
   }
-  clearUploadFileList() { // 清空上传文件
+  clearUploadFileList() { // 弹窗关闭之后，清空上传文件列表
     const { entryData } = this;
     entryData.upload.setState({
       fileList: [],
@@ -54,7 +54,7 @@ export default class OrderListPage extends Component {
             <Col>
               <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary">新建车配任务</Link>
               <Button
-                type="primary"
+                type="default"
                 htmlType="submit"
                 onClick={this.props.showModal}
                 className="order-upload-btn"

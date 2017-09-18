@@ -52,8 +52,8 @@ export default class EntryData extends Component {
         message.error('请选择Excel文件', 3);
         return false;
       },
-      onRemove: () => true,
       // 点击移除文件时的回调，返回值为 false 时不移除
+      onRemove: () => true,
     };
     return (
       <div>
