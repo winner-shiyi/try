@@ -33,6 +33,7 @@
     "no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true, "allowTaggedTemplates": true }],
     "no-param-reassign": 1,
     "arrow-parens": [2, "always"],
-    "react/prefer-stateless-function": 0
+    "react/prefer-stateless-function": 0,
+    "linebreak-style":0
   }
 }
