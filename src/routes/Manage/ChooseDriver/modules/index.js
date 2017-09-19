@@ -31,19 +31,24 @@ export const actions = {
   reset: createAction(CHOOSE_DRIVER_SEARCH_RESET),
   changeSearch: createAction(CHOOSE_DRIVER_CHANGE_SEARCH, 'fields'),
   searchCar: (params) => ({
-    types: [CHOOSE_DRIVER_CARSEARCH_REQUEST, CHOOSE_DRIVER_CARSEARCH_SUCCESS, CHOOSE_DRIVER_CARSEARCH_FAILURE],
+    types: [CHOOSE_DRIVER_CARSEARCH_REQUEST,
+      CHOOSE_DRIVER_CARSEARCH_SUCCESS,
+      CHOOSE_DRIVER_CARSEARCH_FAILURE],
     callAPI: () => fetch(`//${location.host}/mock/SearchCar.json`, params, {
       method: 'GET',
     }),
   }),
   searchDriver: (params) => ({
-    types: [CHOOSE_DRIVER_SEARCH_REQUEST, CHOOSE_DRIVER_SEARCH_SUCCESS, CHOOSE_DRIVER_SEARCH_FAILURE],
+    types: [CHOOSE_DRIVER_SEARCH_REQUEST,
+      CHOOSE_DRIVER_SEARCH_SUCCESS,
+      CHOOSE_DRIVER_SEARCH_FAILURE],
     callAPI: () => fetch('/order/driver/list', params, {
       method:'POST',
     }),
   }),
   dispatchOrder: (params) => ({
-    types: [CHOOSE_DRIVER_DISPATCHORDER_REQUEST, CHOOSE_DRIVER_DISPATCHORDER_SUCCESS,
+    types: [CHOOSE_DRIVER_DISPATCHORDER_REQUEST,
+      CHOOSE_DRIVER_DISPATCHORDER_SUCCESS,
       CHOOSE_DRIVER_DISPATCHORDER_FAILURE],
     callAPI: () => fetch('/order/dispatch', params, {
       method:'POST',
@@ -76,19 +81,11 @@ const ACTION_HANDLERS = {
       loading: false,
     };
   },
+  // 一进入页面初始化司机列表数据
   [CHOOSE_DRIVER_SEARCH_REQUEST]: (state) => ({
     ...state,
+    loading: true,
   }),
-  [CHOOSE_DRIVER_SEARCH_RESET]: (state) => ({
-    ...state,
-    searchParams: {
-      pageNo:'1',
-      pageSize:'10',
-    },
-  }),
-  /**
-   * 一进入页面初始化列表数据
-   */
   [CHOOSE_DRIVER_SEARCH_SUCCESS] : (state, action) => {
     const newState = Object.assign({}, state);
     const { data } = action;
@@ -101,27 +98,18 @@ const ACTION_HANDLERS = {
       4:'冷链',
     };
     const isCanChoose = [];
-    if (driverList && driverList !== 0) {
+    if (driverList && driverList.length !== 0) {
       driverList.map((itemTemp, index) => {
         const item = itemTemp;
         item.key = index;
         item.id = index;
-        // if (item.driverWorkStatus === 0) {
-        //   isCanChoose.push(0);
-        //   item.driverWorkStatus = '配送中';
-        // } else if (item.driverWorkStatus === 1) {
-        //   isCanChoose.push(1);
-        //   item.driverWorkStatus = '已完成';
-        // }
         isCanChoose.push(1);
         item.carType = dictionary[item.carType];
         return false;
       });
     }
-
     newState.data.driverList = driverList;
     newState.data = Object.assign({}, newState.data, data);
-
     return {
       ...newState,
       isCanChoose,
@@ -138,6 +126,7 @@ const ACTION_HANDLERS = {
     message.error(action.msg);
     return {
       ...state,
+      loading: false,
     };
   },
   [CHOOSE_DRIVER_DISPATCHORDER_REQUEST]: (state) => ({
@@ -166,6 +155,13 @@ const ACTION_HANDLERS = {
       paths,
     };
   },
+  [CHOOSE_DRIVER_SEARCH_RESET]: (state) => ({
+    ...state,
+    searchParams: {
+      pageNo:'1',
+      pageSize:'10',
+    },
+  }),
   [CHOOSE_DRIVER_CHANGE_SEARCH]: (state, action) => ({
     ...state,
     searchParams: {
@@ -191,15 +187,15 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   loading: false,
-  noteStatusData: [],
-  exportStatusData: [],
+  // noteStatusData: [],
+  // exportStatusData: [],
   data: {
     driverList:[],
   },
-  driverStatus:[
-    ['0', '配送中'],
-    ['1', '已完成'],
-  ],
+  // driverStatus:[
+  //   ['0', '配送中'],
+  //   ['1', '已完成'],
+  // ],
   page: {
     pageNo: '1',
     pageSize: '10',
