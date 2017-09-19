@@ -8,13 +8,14 @@ class View extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      index:-1,
+      index:-1, // 保存当前选择的司机的index
       driverId:'',
     };
   }
 
   componentDidMount() {
     const { props } = this;
+    // { token:sessionStorage.getItem('accessToken') } 这个删了不影响
     props.searchCar({ token:sessionStorage.getItem('accessToken') });
     props.searchDriver({
       ...this.props.searchParams,
@@ -114,8 +115,7 @@ class View extends Component {
                         driverId:record.driverId,
                       });
                     }}
-                  >
-                    选择</Button>
+                  >选择</Button>
                   : choice
               }
             </span>

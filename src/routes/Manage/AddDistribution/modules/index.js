@@ -149,6 +149,16 @@ function makeRecordInfo(extendProps = [], seq = -1) {
     'userName',
     'phone',
   ], extendProps);
+  // const recordProps = [
+  //   ...[
+  //     'region',
+  //     'addressDetail',
+  //     'shopName',
+  //     'userName',
+  //     'phone',
+  //   ],
+  //   ...extendProps,
+  // ];
   const genUUID = (prop) => (seq > -1 ? `${prop}-${seq}-suffix` : prop);
   const recordInfo = {};
   recordProps.forEach((prop) => {
@@ -227,6 +237,57 @@ function createFieldModel(id = 0, extFields = []) {
     ],
     extFields,
   );
+  // const fields = [
+  //   ...[
+  //     {
+  //       label: '商家名称',
+  //       name: initUUID('shopName', 0),
+  //       required: true,
+  //       max: 20,
+  //     },
+  //     {
+  //       label: '联系人',
+  //       name: initUUID('userName', 0),
+  //       required: true,
+  //       max: 20,
+  //     },
+  //     {
+  //       label: '联系电话',
+  //       name: initUUID('phone', 0),
+  //       required: true,
+  //       phone: true,
+  //     },
+  //     {
+  //       label: '送达起始时间',
+  //       name: initUUID('deliveryBeginTime', 0),
+  //       required: false,
+  //       type: 'datetime',
+  //     },
+  //     {
+  //       label: '收货地区',
+  //       required: true,
+  //       name: initUUID('region', 0),
+  //       type: 'Cascader',
+  //       data: addr,
+  //       changeOnSelect: true,
+  //     },
+  //     {
+  //       label: '送达结束时间',
+  //       name: initUUID('deliveryEndTime', 0),
+  //       required: false,
+  //       type: 'datetime',
+  //     },
+  //     {
+  //       label: '详细地址',
+  //       name: initUUID('addressDetail', 0),
+  //       required: true,
+  //       type: 'textarea',
+  //       max: 60,
+  //     },
+  //   ],
+  //   ...extFields,
+  // ];
+
   return {
     id,
     fields,
