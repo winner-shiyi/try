@@ -1,5 +1,3 @@
-# IndustrialPark_Web
-产业园后台管理系统项目，基于 React, Redux, React-Router及antd的后台管理系统
 
 # Prepareration
 
