@@ -1,6 +1,16 @@
 import { message } from 'antd';
 import fetch from '../../../../../lib/fetch';
-import { createAction } from '../../../../util';
+import { createAction, isResultSuccessful } from '../../../../util';
+
+export const statusData = [
+  { statusCode: '1', statusLabel: '待分配' },
+  { statusCode: '2', statusLabel: '待取货' },
+  { statusCode: '3', statusLabel: '配送中' },
+  { statusCode: '4', statusLabel: '已完成' },
+  { statusCode: '5', statusLabel: '已取消' },
+];
+
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -47,7 +57,7 @@ const search = (params) => (dispatch) => { // 第一次进入页面
         resultData,
         resultDesc,
       } = json;
-      if (resultCode === '0') {
+      if (isResultSuccessful(resultCode)) {
         dispatch(success(resultData));
       } else {
         dispatch(failure(resultDesc));
@@ -76,7 +86,7 @@ export const actions = {
   search,
   setStatus: (params) => ({
     types: [DISTRIBUTION_SET_STATUS_REQUEST, DISTRIBUTION_SET_STATUS_SUCCESS, DISTRIBUTION_SET_STATUS_FAILURE],
-    callAPI: () => fetch('/order/cancel', { // 订单编号
+    callAPI: () => fetch('/order/cancel', {
       orderNo: params.orderNo,
     }),
   }),
@@ -84,12 +94,11 @@ export const actions = {
   cancel: createAction(DISTRIBUTION_ENTRY_CANCEL),
   deleteOrder: (params) => ({
     types: [DISTRIBUTION_DELETE_REQUEST, DISTRIBUTION_DELETE_SUCCESS, DISTRIBUTION_DELETE_FAILURE],
-    callAPI: () => fetch('/order/delete', { // 订单编号
+    callAPI: () => fetch('/order/delete', {
       orderNo: params.orderNo,
     }),
   }),
   clearData: createAction(DISTRIBUTION_CLEAR_DATA),
-  // downExcel,
 };
 
 // ------------------------------------
@@ -100,17 +109,25 @@ const ACTION_HANDLERS = {
     ...state,
     loading: true,
   }),
-  [DISTRIBUTION_SUCCESS]: (state, action) => ({
-    ...state,
-    loading: false,
-    data: action.payload.list, // 没有使用callAPI方法，通过原始传入payload: data
-    page: {
-      ...state.page,
-      pageNo: action.payload.pageNo,
-      pageSize: action.payload.pageSize,
-      total: action.payload.total,
-    },
-  }),
+  [DISTRIBUTION_SUCCESS]: (state, action) => {
+    const {
+      list,
+      pageNo,
+      pageSize,
+      total,
+    } = action.payload;
+    return {
+      ...state,
+      loading: false,
+      data: list, // 没有使用callAPI方法，通过原始传入payload: data
+      page: {
+        ...state.page,
+        pageNo,
+        pageSize,
+        total,
+      },
+    };
+  },
   [DISTRIBUTION_FAILURE]: (state, action) => {
     message.error(action.payload); // 没有使用callAPI方法,因为原始传入的dispatch(failure(json.resultDesc))就是msg
     return {
@@ -156,7 +173,7 @@ const ACTION_HANDLERS = {
     };
   },
   [DISTRIBUTION_DELETE_FAILURE]: (state, action) => {
-    message.error(action.msg); // 这里调接口的时候使用了callAPI方法，可以在creatStore里面看到封装返回msg
+    message.error(action.msg);
     return {
       ...state,
       loading: false,
@@ -195,6 +212,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   visible: false,
+  rowKey: 'orderNo',
   loading: false,
   page: {
     pageNo: '1',

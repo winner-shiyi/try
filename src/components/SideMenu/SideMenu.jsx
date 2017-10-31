@@ -7,7 +7,7 @@ import {
 import {
   Link,
 } from 'react-router';
-import { Scrollbars } from 'react-custom-scrollbars';
+import Scrollbars from 'react-custom-scrollbars';
 import { connect } from 'react-redux';
 import { common } from '../../store/common';
 

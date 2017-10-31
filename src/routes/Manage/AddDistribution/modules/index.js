@@ -51,10 +51,15 @@ const editOredr = (id) => (dispatch) => {
   dispatch(request());
   return fetch('/order/infoDetail', { orederNo:id })
     .then((json) => {
-      if (json.resultCode === '0') {
-        dispatch(success(json.resultData));
+      const {
+        resultCode,
+        resultData,
+        resultDesc,
+      } = json;
+      if (isResultSuccessful(resultCode)) {
+        dispatch(success(resultData));
       } else {
-        dispatch(failure(json.resultDesc));
+        dispatch(failure(resultDesc));
       }
     });
 };
@@ -76,11 +81,16 @@ const senderSearch = (params) => (dispatch) => {
   dispatch(senderSearchRequest(params));
   return fetch('/sender/fuzzyQuery', { shopName: params })
     .then((json) => {
-      if (json.resultCode === '0') {
-        dispatch(senderSearchSuccess(json.resultData));
-        return json.resultData.list;
+      const {
+        resultCode,
+        resultData,
+        resultDesc,
+      } = json;
+      if (isResultSuccessful(resultCode)) {
+        dispatch(senderSearchSuccess(resultData));
+        return resultData.list;
       }
-      dispatch(senderSearchFailure(json.resultDesc));
+      dispatch(senderSearchFailure(resultDesc));
       return false;
     });
 };
@@ -142,23 +152,17 @@ export const actions = {
  * @param {*} seq
  */
 function makeRecordInfo(extendProps = [], seq = -1) {
-  const recordProps = Object.assign([
+  const recordFields = [
     'region',
     'addressDetail',
     'shopName',
     'userName',
     'phone',
-  ], extendProps);
-  // const recordProps = [
-  //   ...[
-  //     'region',
-  //     'addressDetail',
-  //     'shopName',
-  //     'userName',
-  //     'phone',
-  //   ],
-  //   ...extendProps,
-  // ];
+  ];
+  const recordProps = [
+    ...recordFields,
+    ...extendProps,
+  ];
   const genUUID = (prop) => (seq > -1 ? `${prop}-${seq}-suffix` : prop);
   const recordInfo = {};
   recordProps.forEach((prop) => {
@@ -169,7 +173,6 @@ function makeRecordInfo(extendProps = [], seq = -1) {
       recordInfo[propId] = { value: '' };
     }
   });
-
   return recordInfo;
 }
 /**
@@ -187,106 +190,51 @@ function initUUID(name, numId, prefix = '', suffix = 'suffix') {
  * @param {*} extFields
  */
 function createFieldModel(id = 0, extFields = []) {
-  const fields = Object.assign(
-    [
-      {
-        label: '商家名称',
-        name: initUUID('shopName', 0),
-        required: true,
-        max: 20,
-      },
-      {
-        label: '联系人',
-        name: initUUID('userName', 0),
-        required: true,
-        max: 20,
-      },
-      {
-        label: '联系电话',
-        name: initUUID('phone', 0),
-        required: true,
-        phone: true,
-      },
-      {
-        label: '送达起始时间',
-        name: initUUID('deliveryBeginTime', 0),
-        required: false,
-        type: 'datetime',
-      },
-      {
-        label: '收货地区',
-        required: true,
-        name: initUUID('region', 0),
-        type: 'Cascader',
-        data: addr,
-        changeOnSelect: true,
-      },
-      {
-        label: '送达结束时间',
-        name: initUUID('deliveryEndTime', 0),
-        required: false,
-        type: 'datetime',
-      },
-      {
-        label: '详细地址',
-        name: initUUID('addressDetail', 0),
-        required: true,
-        type: 'textarea',
-        max: 60,
-      },
-    ],
-    extFields,
-  );
-  // const fields = [
-  //   ...[
-  //     {
-  //       label: '商家名称',
-  //       name: initUUID('shopName', 0),
-  //       required: true,
-  //       max: 20,
-  //     },
-  //     {
-  //       label: '联系人',
-  //       name: initUUID('userName', 0),
-  //       required: true,
-  //       max: 20,
-  //     },
-  //     {
-  //       label: '联系电话',
-  //       name: initUUID('phone', 0),
-  //       required: true,
-  //       phone: true,
-  //     },
-  //     {
-  //       label: '送达起始时间',
-  //       name: initUUID('deliveryBeginTime', 0),
-  //       required: false,
-  //       type: 'datetime',
-  //     },
-  //     {
-  //       label: '收货地区',
-  //       required: true,
-  //       name: initUUID('region', 0),
-  //       type: 'Cascader',
-  //       data: addr,
-  //       changeOnSelect: true,
-  //     },
-  //     {
-  //       label: '送达结束时间',
-  //       name: initUUID('deliveryEndTime', 0),
-  //       required: false,
-  //       type: 'datetime',
-  //     },
-  //     {
-  //       label: '详细地址',
-  //       name: initUUID('addressDetail', 0),
-  //       required: true,
-  //       type: 'textarea',
-  //       max: 60,
-  //     },
-  //   ],
-  //   ...extFields,
-  // ];
+  const receiverField = [
+    {
+      label: '商家名称',
+      name: initUUID('shopName', 0),
+      required: true,
+      max: 20,
+    },
+    {
+      label: '联系人',
+      name: initUUID('userName', 0),
+      required: true,
+      max: 20,
+    },
+    {
+      label: '联系电话',
+      name: initUUID('phone', 0),
+      required: true,
+      phone: true,
+    },
+    {
+      label: '配送时间',
+      name: initUUID('deliveryTime', 0),
+      required: false,
+      type: 'twodateRange',
+    },
+    {
+      label: '收货地区',
+      required: true,
+      name: initUUID('region', 0),
+      type: 'Cascader',
+      data: addr,
+      changeOnSelect: true,
+    },
+    {
+      label: '详细地址',
+      name: initUUID('addressDetail', 0),
+      required: true,
+      type: 'textarea',
+      max: 60,
+    },
+  ];
+  const fields = [
+    ...receiverField,
+    ...extFields,
+  ];
 
   return {
     id,
@@ -388,10 +336,10 @@ const ACTION_HANDLERS = {
           phone: true,
         },
         {
-          label: '送达起始时间',
-          name: initUUID('deliveryBeginTime', index),
+          label: '配送时间',
+          name: initUUID('deliveryTime', index),
           required: false,
-          type: 'datetime',
+          type: 'twodateRange',
         },
         {
           label: '收货地区',
@@ -400,12 +348,6 @@ const ACTION_HANDLERS = {
           type: 'Cascader',
           data: addr,
           changeOnSelect: true, // 每选择一项就会马上改变
-        },
-        {
-          label: '送达结束时间',
-          name: initUUID('deliveryEndTime', index),
-          required: false,
-          type: 'datetime',
         },
         {
           label: '详细地址',
@@ -462,10 +404,10 @@ const ACTION_HANDLERS = {
           phone: true,
         },
         {
-          label: '送达起始时间',
-          name: genUUID('deliveryBeginTime'),
+          label: '配送时间',
+          name: genUUID('deliveryTime'),
           required: false,
-          type: 'datetime',
+          type: 'twodateRange',
         },
         {
           label: '收货地区',
@@ -474,12 +416,6 @@ const ACTION_HANDLERS = {
           type: 'Cascader',
           data: addr,
           changeOnSelect: true, // 每选择一项就会马上改变
-        },
-        {
-          label: '送达结束时间',
-          name: genUUID('deliveryEndTime'),
-          required: false,
-          type: 'datetime',
         },
         {
           label: '详细地址',
@@ -547,7 +483,6 @@ const ACTION_HANDLERS = {
     ...state,
   }),
   [ADDDISTRIBUTION_SENDER_SEARCH_SUCCESS]: (state, action) => {
-    // message.success('搜索成功')
     const newState = Object.assign({}, state);
     newState.newSenderInfos = action.payload.list;
     return newState;
@@ -565,14 +500,13 @@ const ACTION_HANDLERS = {
     ...state,
   }),
   [ADDDISTRIBUTION_RECEIVER_SEARCH_SUCCESS]: (state, action) => {
-    // message.success('搜索成功')
     const newState = Object.assign({}, state);
     const activeId = newState.activeReceiverId;
     newState.newReceiverInfos[activeId] = action.payload.list;
     return newState;
   },
   [ADDDISTRIBUTION_RECEIVER_SEARCH_FAILURE]: (state, action) => {
-    message.error(action.payload); // 没有使用callAPI封装的action时候，根据action.payload对应获取
+    message.error(action.payload);
     return {
       ...state,
     };
@@ -677,6 +611,5 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   const handler = ACTION_HANDLERS[action.type];
-
   return handler ? handler(state, action) : state;
 }

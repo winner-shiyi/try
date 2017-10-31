@@ -15,7 +15,7 @@ class View extends Component {
 
   componentDidMount() {
     const { props } = this;
-    // { token:sessionStorage.getItem('accessToken') } 这个删了不影响
+    // 这个删了不影响 { token:sessionStorage.getItem('accessToken') }
     props.searchCar({ token:sessionStorage.getItem('accessToken') });
     props.searchDriver({
       ...this.props.searchParams,
@@ -35,6 +35,10 @@ class View extends Component {
     const param = {};
     param.orderNo = that.props.params.id;
     param.driverId = that.state.driverId;
+    if (!param.driverId) {
+      message.error('请选择司机');
+      return;
+    }
     this.props.dispatchOrder(param).then(
       () => {
         const { paths } = this.props;
@@ -49,7 +53,6 @@ class View extends Component {
   render() {
     const {
       data,
-      // driverStatus,
       carClassesData,
       carLengthData,
       isCanChoose,
@@ -84,7 +87,7 @@ class View extends Component {
         search: true,
       },
       {
-        label: '车厢长度',
+        label: '车厢长度（米）',
         name: 'carLength',
         data: carLengthData,
       },

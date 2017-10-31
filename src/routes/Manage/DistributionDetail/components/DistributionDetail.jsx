@@ -4,7 +4,6 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import { Form, Input, Row, Table, Button } from 'antd';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { createFormItem } from '../../../../components';
 import formatDate from '../../../../util/formatDate';
 import difftime from '../../../../util/difftime';
@@ -44,73 +43,52 @@ class DistributionDetailForm extends Component {
 
     const punchInfo = values.punchInfo;
     const cardArray = [];
-
     if (punchInfo && punchInfo.length !== 0) {
       punchInfo.map((itemTemp, index) => {
         const item = itemTemp;
-        let theBooleans = [item.hasArrived, item.hasLeft, item.receiverFlag];
+        const {
+          hasArrived,
+          hasLeft,
+          receiverFlag,
+          shopName,
+          arriveTime,
+          leaveTime,
+          actualArriveAddress,
+          actualLeaveAddress,
+        } = item;
+        let theBooleans = [hasArrived, hasLeft, receiverFlag];
         theBooleans = theBooleans.join();
         let newItem;
         let newItem2;
-        if (theBooleans === [true, true, true].toString()) {
+        if (theBooleans === [true, false, false].toString()) { // 到达发货地
           newItem = {
-            clockSort:index,
-            node:`到达收货地：${item.shopName}`,
-            time : formatDate(item.arriveTime, 'yyyy-MM-dd HH:mm:ss'),
-            address : item.actualArriveAddress,
+            node:`到达发货地：${shopName}`,
+            time : arriveTime ? formatDate(arriveTime, 'yyyy-MM-dd HH:mm:ss') : '-',
+            address : actualArriveAddress,
           };
+          cardArray.push(newItem);
+        } else if (theBooleans === [false, true, false].toString()) { // 离开发货地
           newItem2 = {
-            clockSort:index,
-            node:`离开收货地：${item.shopName}`,
-            time : formatDate(item.leaveTime, 'yyyy-MM-dd HH:mm:ss'),
-            address : item.actualLeaveAddress,
-            stopTime: difftime(item.arriveTime, item.leaveTime),
+            node:`离开发货地：${shopName}`,
+            time : leaveTime ? formatDate(leaveTime, 'yyyy-MM-dd HH:mm:ss') : '-',
+            address : actualLeaveAddress,
+          };
+          cardArray.push(newItem2);
+        } else if (theBooleans === [true, false, true].toString()) { // 到达收货地
+          newItem = {
+            node:`到达收货地：${shopName}`,
+            time : arriveTime ? formatDate(arriveTime, 'yyyy-MM-dd HH:mm:ss') : '-',
+            address : actualArriveAddress,
           };
           cardArray.push(newItem);
-          cardArray.push(newItem2);
-        } else if (theBooleans === [true, true, false].toString()) {
-          newItem = {
-            node:`到达发货地：${item.shopName}`,
-            time : formatDate(item.arriveTime, 'yyyy-MM-dd HH:mm:ss'),
-            address : item.actualArriveAddress,
-          };
+        } else if (theBooleans === [false, true, true].toString()) { // 离开收货地
           newItem2 = {
-            node:`离开发货地：${item.shopName}`,
-            time : formatDate(item.leaveTime, 'yyyy-MM-dd HH:mm:ss'),
-            address : item.actualLeaveAddress,
+            node:`离开收货地：${shopName}`,
+            time : leaveTime ? formatDate(leaveTime, 'yyyy-MM-dd HH:mm:ss') : '-',
+            address : leaveTime ? actualLeaveAddress : '-',
+            stopTime: leaveTime ? difftime(punchInfo[index - 1].arriveTime, leaveTime) : '-',
           };
-          cardArray.push(newItem);
           cardArray.push(newItem2);
-        } else if (theBooleans === [true, false, true].toString()) {
-          newItem = {
-            clockSort:index,
-            node:`到达收货地：${item.shopName}`,
-            time : formatDate(item.arriveTime, 'yyyy-MM-dd HH:mm:ss'),
-            address : item.actualArriveAddress,
-          };
-          cardArray.push(newItem);
-        } else if (theBooleans === [true, false, false].toString()) { // 到达，没有离开， false
-          newItem = {
-            node:`到达发货地：${item.shopName}`,
-            time : formatDate(item.arriveTime, 'yyyy-MM-dd HH:mm:ss'),
-            address : item.actualArriveAddress,
-          };
-          cardArray.push(newItem);
-        } else if (theBooleans === [false, true, true].toString()) {
-          newItem = {
-            clockSort:index,
-            node:`离开收货地：${item.shopName}`,
-            time : formatDate(item.leaveTime, 'yyyy-MM-dd HH:mm:ss'),
-            address : item.actualLeaveAddress,
-          };
-          cardArray.push(newItem);
-        } else if (theBooleans === [false, true, false].toString()) {
-          newItem = {
-            node:`离开发货地：${item.shopName}`,
-            time : formatDate(item.leaveTime, 'yyyy-MM-dd HH:mm:ss'),
-            address : item.actualLeaveAddress,
-          };
-          cardArray.push(newItem);
         }
         cardArray.map((itemTempTwo, indexTwo) => {
           const itemCar = itemTempTwo;
@@ -155,6 +133,10 @@ class DistributionDetailForm extends Component {
           title: '文字备注',
           dataIndex: 'textTip',
           key: 'textTip',
+          render: (text, record) => {
+            const joinText = record.reason ? `【${record.reason}】${text}` : text;
+            return joinText;
+          },
         },
         {
           title: '图片备注',
@@ -181,11 +163,7 @@ class DistributionDetailForm extends Component {
      * @param {*} orderfields
      */
     const orderForm = (orderfields) => (
-      <Scrollbars
-        autoHeight
-        autoHeightMin={100}
-        autoHeightMax={550}
-      >
+      <div>
         <Form layout="horizontal">
           <FormItem label="" {...formItemLayout} style={{ display: 'none' }}>
             {getFieldDecorator('id', {
@@ -207,7 +185,7 @@ class DistributionDetailForm extends Component {
             }
           </Row>
         </Form>
-      </Scrollbars>
+      </div>
     );
     /**
      * 司机信息表格
@@ -217,11 +195,7 @@ class DistributionDetailForm extends Component {
       <div>
         <Row><h3 style={{ marginTop: '20px', marginBottom: '20px', textAlign:'center', fontSize: '16px' }}>
         司机信息</h3></Row>
-        <Scrollbars
-          autoHeight
-          autoHeightMin={100}
-          autoHeightMax={550}
-        >
+        <div>
           <Form layout="horizontal">
             <FormItem label="" {...formItemLayout} style={{ display: 'none' }}>
               {getFieldDecorator('id', {
@@ -243,7 +217,7 @@ class DistributionDetailForm extends Component {
               }
             </Row>
           </Form>
-        </Scrollbars>
+        </div>
       </div>
     );
     /**
@@ -252,11 +226,6 @@ class DistributionDetailForm extends Component {
      */
     const clockForm = (clockData) => {
       const columns = [
-        {
-          title: '排线次序',
-          dataIndex: 'clockSort',
-          key: 'clockSort',
-        },
         {
           title: '打卡节点',
           dataIndex: 'node',

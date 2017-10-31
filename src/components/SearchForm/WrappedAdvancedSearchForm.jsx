@@ -65,12 +65,6 @@ class AdvancedSearchForm extends Component {
             (value.name || value.dataIndex) === key
           );
           switch (field.type) {
-            case 'dateRange':
-              res[`${key}Start`] = values[key] && values[key].length !== 0 && values[key][0].format
-                ? values[key][0].format('YYYY-MM-DD 00:00:00') : values[key] && values[key][0];
-              res[`${key}End`] = values[key] && values[key].length !== 0 && values[key][1].format
-                ? values[key][1].format('YYYY-MM-DD 23:59:59') : values[key] && values[key][1];
-              break;
             case 'dateTimeRange':
               res[`${key}Start`] = values[key] && values[key].length !== 0 && values[key][0].format
                 ? values[key][0].format('YYYY-MM-DD HH:mm:ss') : values[key] && values[key][0];
@@ -82,13 +76,6 @@ class AdvancedSearchForm extends Component {
                 ? values[key][0].format('YYYY-MM-DD') : values[key] && values[key][0];
               res[`${key}End`] = values[key] && values[key].length !== 0 && values[key][1].format
                 ? values[key][1].format('YYYY-MM-DD') : values[key] && values[key][1];
-              break;
-            case 'twodateRange':
-              res[`${key}Start`] =
-                values[key] && values[key].length !== 0 && values[key][0] && values[key][0].format
-                  ? values[key][0].format('YYYY-MM-DD 00:00:00') : (values[key] && values[key][0]) || '';
-              res[`${key}End`] = values[key] && values[key].length !== 0 && values[key][1] && values[key][1].format
-                ? values[key][1].format('YYYY-MM-DD 23:59:59') : (values[key] && values[key][1]) || '';
               break;
             case 'date':
               res[key] = values[key] && values[key].format ? values[key].format('YYYY-MM-DD') : values[key];

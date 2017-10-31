@@ -6,7 +6,7 @@ import Home from './Home';
 import SignInRoute from './SignIn';
 import FindPwdRoute from './FindPwd';
 import ManageRoute from './Manage';
-// import CountlyManager from '../util/monitor/CountlyManager';
+import CountlyManager from '../util/monitor/CountlyManager';
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -16,7 +16,7 @@ const createRoutes = (store) => ({
   indexRoute  : Home,
   onEnter: ({ location }, replace, next) => {
     // 初始化的appKey和url在src/config.json中的countly处可找到
-    // CountlyManager.init();
+    CountlyManager.init();
 
     if (location.pathname === '/' && sessionStorage.getItem('accessToken')) {
       replace('/Manage');

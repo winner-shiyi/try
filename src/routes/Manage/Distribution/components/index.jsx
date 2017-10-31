@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'antd';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import OrderListPage from '../../../../components/OrderListPage';
 import formatDate from '../../../../util/formatDate';
+import { statusData } from '../modules';
 import './style.scss';
 
 class View extends Component {
@@ -14,6 +15,10 @@ class View extends Component {
   }
   componentWillUnmount() {
     this.props.clearData();// 这里不直接调用reset()方法是因为，reset只重置了搜索字段，没有重置分页
+  }
+  handleAddClick = () => {
+    // browserHistory.push(`/Manage/MailingDetail/${record.waybillNo}`);
+    browserHistory.push('/Manage/AddDistribution');
   }
 
   render() {
@@ -39,13 +44,16 @@ class View extends Component {
         dataIndex: 'orderStatus',
         search: true,
         type: 'select',
-        data: [['1', '待分配'], ['2', '待取货'], ['3', '配送中'], ['4', '已完成'], ['5', '已取消'], ['6', '待提交']],
+        data: statusData.map((item) => ([item.statusCode, item.statusLabel])),
         key: 'orderStatus',
         render: (text, record) => {
           const statusName = record.orderStatus;
-          const statusObj = { 1: '待分配', 2: '待取货', 3: '配送中', 4: '已完成', 5: '已取消', 6: '待提交' };
-          const statusValue = statusObj[statusName];
-          return statusValue;
+          const statusObj = {};
+          statusData.map((item) => {
+            statusObj[item.statusCode] = item.statusLabel;
+            return statusObj;
+          });
+          return statusObj[statusName];
         },
       },
       {
@@ -113,77 +121,89 @@ class View extends Component {
       {
         title: '操作',
         key: 'action',
-        render: (text, record, index) => (
-          <span>
+        render: (text, record, index) => {
+          // actionStatus状态码：{ 1: '待分配', 2: '待取货', 3: '配送中', 4: '已完成', 5: '已取消', 6: '待提交' }
+          const actionList = [
             {
-              record.orderStatus === 6 &&
-              <Link
-                to={`/Manage/AddDistribution/${data[index].orderNo}`}
-                className="add-btn ant-btn ant-btn-primary Distribution-edit-btn"
-              >编辑</Link>
-            }
+              actionStatus: null,
+              noActionStatus: [6], // 非待提交状态下 才显示【明细】
+              elem: (
+                <Link
+                  to={`/Manage/DistributionDetail/${data[index].orderNo}`}
+                  className="add-btn ant-btn ant-btn-primary Distribution-btn Distribution-detail-btn"
+                >明细</Link>
+              ),
+            },
             {
-              record.orderStatus === 6 &&
-              <Button
-                type="primary"
-                className="Distribution-delete-btn"
-                onClick={
-                  () => {
-                    Modal.confirm({
-                      title: '该订单还没有提交，确定要删除吗？',
-                      onOk: () => {
-                        this.props.deleteOrder(record).then((success) => {
-                          success && this.props.search({
-                            ...this.props.searchParams,
-                            ...this.props.page,
+              actionStatus: [1], // 待分配状态下 才显示【派单】
+              noActionStatus: null,
+              elem: (
+                <Link
+                  to={`/Manage/ChooseDriver/${data[index].orderNo}`}
+                  className="add-btn ant-btn ant-btn-primary Distribution-btn Distribution-dispatch-btn"
+                >派单</Link>
+              ),
+            },
+            {
+              actionStatus: null,
+              noActionStatus: [4, 5, 6], // 非已完成、已取消、待提交状态下 才显示【取消】
+              elem: (
+                <Button
+                  type="danger"
+                  className="Distribution-cancel-btn"
+                  onClick={
+                    () => {
+                      Modal.confirm({
+                        title: '确定要取消该订单吗？',
+                        onOk: () => {
+                          this.props.setStatus(record, index).then((success) => {
+                            success && this.props.search({
+                              ...this.props.searchParams,
+                              ...this.props.page,
+                            });
                           });
-                        });
-                      },
-                      onCancel() {},
-                    });
+                        },
+                        onCancel() {},
+                      });
+                    }
                   }
-                }
-              >删除</Button>
-            }
-            {
-              record.orderStatus !== 6 &&
-              <Link
-                to={`/Manage/DistributionDetail/${data[index].orderNo}`}
-                className="add-btn ant-btn ant-btn-primary Distribution-detail-btn"
-              >明细</Link>
-            }
-            {
-              record.orderStatus === 1 &&
-              <Link
-                to={`/Manage/ChooseDriver/${data[index].orderNo}`}
-                className="add-btn ant-btn ant-btn-primary Distribution-dispatch-btn"
-              >派单</Link>
-            }
-            {
-              record.orderStatus !== 4 && record.orderStatus !== 5 && record.orderStatus !== 6 &&
-              <Button
-                type="danger"
-                className="Distribution-cancel-btn"
-                onClick={
-                  () => {
-                    Modal.confirm({
-                      title: '确定要取消该订单吗？',
-                      onOk: () => {
-                        this.props.setStatus(record, index).then((success) => {
-                          success && this.props.search({
-                            ...this.props.searchParams,
-                            ...this.props.page,
-                          });
-                        });
-                      },
-                      onCancel() {},
-                    });
-                  }
-                }
-              >取消</Button>
-            }
-          </span>
-        ),
+                >取消</Button>
+              ),
+            },
+          ];
+          return (
+            <span>
+              {
+                actionList.map((item) => {
+                  const { actionStatus, noActionStatus, elem } = item;
+                  const elemList = [];
+                  actionStatus && actionStatus.includes(record.orderStatus) && elemList.push(elem);
+                  noActionStatus && !noActionStatus.includes(record.orderStatus) && elemList.push(elem);
+                  return elemList;
+                })
+              }
+            </span>
+          );
+        },
+      },
+    ];
+
+    const buttons = [
+      {
+        label: '新建车配任务',
+        onClick: () => {
+          this.handleAddClick();
+        },
+      },
+      {
+        label: '订单批量导入',
+        type: 'default',
+        // className: 'order-upload-btn',
+        onClick: () => {
+          this.props.showModal();
+          // this.props.add();
+          // this.props.roleSearch();
+        },
       },
     ];
 
@@ -192,6 +212,7 @@ class View extends Component {
         {...this.props}
         title="车配任务管理"
         columns={columns}
+        buttons={buttons}
       />
     );
   }

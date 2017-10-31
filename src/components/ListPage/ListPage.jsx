@@ -62,6 +62,7 @@ export default class ListPage extends Component {
       confirmLoading,
       columns,
       data,
+      rowKey,
       search,
       cancel,
       record,
@@ -116,6 +117,7 @@ export default class ListPage extends Component {
           loading={loading}
           search={search}
           expandedRowRender={expandedRowRender}
+          rowKey={rowKey}
           pagination={
             page ? {
               current: page.pageNo,

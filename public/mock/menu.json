@@ -12,20 +12,70 @@
       "sort": 10
     },
     {
-      "id": "121",
-      "href": "/Manage/Distribution",
+      "id": "111",
+      "href": "/Manage/ReceiverList",
       "isShow": "1",
-      "name": "车配任务管理",
+      "name": "商家管理",
       "parentId": "100",
       "parentIds": "0,1,100,",
       "root": false,
       "sort": 30
     },
     {
-      "href": "/Manage/Distribution",
+      "href": "/Manage/ReceiverList",
+      "id": "1111",
+      "isShow": "1",
+      "name": "收货商家列表",
+      "parentId": "111",
+      "parentIds": "0,1,100,111,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "1112",
+      "isShow": "0",
+      "name": "查看页面",
+      "parentId": "1111",
+      "parentIds": "0,1,100,111,1111,",
+      "permission": "Manage:ReceiverList:read",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "href": "/Manage/Addreceiver",
+      "id": "1121",
+      "isShow": "1",
+      "name": "新增收货商家",
+      "parentId": "111",
+      "parentIds": "0,1,100,111,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "1122",
+      "isShow": "0",
+      "name": "查看页面",
+      "parentId": "1121",
+      "parentIds": "0,1,100,111,1121,",
+      "permission": "Manage:Addreceiver:read",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "121",
+      "href": "/Manage/OrderList",
+      "isShow": "1",
+      "name": "订单管理",
+      "parentId": "100",
+      "parentIds": "0,1,100,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "href": "/Manage/OrderList",
       "id": "1211",
       "isShow": "1",
-      "name": "车配任务管理",
+      "name": "订单管理列表",
       "parentId": "121",
       "parentIds": "0,1,100,121,",
       "root": false,
@@ -37,46 +87,76 @@
       "name": "查看页面",
       "parentId": "1211",
       "parentIds": "0,1,100,121,1211,",
+      "permission": "Manage:OrderList:read",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "131",
+      "href": "/Manage/Distribution",
+      "isShow": "1",
+      "name": "配载单管理",
+      "parentId": "100",
+      "parentIds": "0,1,100,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "href": "/Manage/Distribution",
+      "id": "1311",
+      "isShow": "1",
+      "name": "配载单列表",
+      "parentId": "131",
+      "parentIds": "0,1,100,131,",
+      "root": false,
+      "sort": 30
+    },
+    {
+      "id": "1312",
+      "isShow": "0",
+      "name": "查看页面",
+      "parentId": "1311",
+      "parentIds": "0,1,100,131,1311,",
       "permission": "Manage:Distribution:read",
       "root": false,
       "sort": 30
     },
     {
       "href": "/Manage/AddDistribution",
-      "id": "1221",
+      "id": "1321",
       "isShow": "1",
-      "name": "新增车配任务",
-      "parentId": "121",
-      "parentIds": "0,1,100,121,",
+      "name": "新增配载单",
+      "parentId": "131",
+      "parentIds": "0,1,100,131,",
       "root": false,
       "sort": 30
     },
     {
-      "id": "1222",
+      "id": "1322",
       "isShow": "0",
       "name": "查看页面",
-      "parentId": "1221",
-      "parentIds": "0,1,100,121,1221,",
+      "parentId": "1321",
+      "parentIds": "0,1,100,131,1321,",
       "permission": "Manage:AddDistribution:read",
       "root": false,
       "sort": 30
     },
     {
       "href": "/Manage/ChooseDriver",
-      "id": "1231",
+      "id": "1331",
       "isShow": "1",
       "name": "分配司机列表",
-      "parentId": "121",
-      "parentIds": "0,1,100,121,",
+      "parentId": "131",
+      "parentIds": "0,1,100,131,",
       "root": false,
       "sort": 30
     },
     {
-      "id": "1232",
+      "id": "1332",
       "isShow": "0",
       "name": "查看页面",
-      "parentId": "1231",
-      "parentIds": "0,1,100,121,1231,",
+      "parentId": "1331",
+      "parentIds": "0,1,100,131,1331,",
       "permission": "Manage:ChooseDriver:read",
       "root": false,
       "sort": 30
@@ -90,7 +170,6 @@
       "root": false,
       "sort": 10
     }
-
   ],
   "resultDesc": "SUCCESS"
 }

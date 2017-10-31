@@ -1,11 +1,16 @@
 // We only need to import the modules necessary for initial render
+import { injectReducer } from '../../store/reducers';
 import CoreLayout from '../../layouts/CoreLayout';
+import { common } from '../../store/common';
 import Home from '../Home';
+
 import Distribution from './Distribution';
 import AddDistribution from './AddDistribution';
 import DistributionDetail from './DistributionDetail';
 import ChooseDriver from './ChooseDriver';
-
+import ReceiverList from './ReceiverList';
+import Addreceiver from './Addreceiver';
+import OrderList from './OrderList';
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -20,29 +25,39 @@ export const createRoutes = (store) => ({
   onLeave: () => {
   },
   childRoutes : [
-    Distribution(store), // 车配任务管理
-    AddDistribution(store), // 新增车配任务
-    DistributionDetail(store), // 车配任务明细
+    Distribution(store), // 配载单管理列表页
+    AddDistribution(store), // 新增配载单
+    DistributionDetail(store), // 配载单明细
     ChooseDriver(store), // 选择司机
+    ReceiverList(store), // 收货商家管理列表页
+    Addreceiver(store), // 新增收货商家
+    OrderList(store), // 订单管理列表页
   ],
 });
 
-/*  Note: childRoutes can be chunked or otherwise loaded programmatically
-    using getChildRoutes with the following signature:
-
-    getChildRoutes (location, cb) {
+export function createChildRoutes(moduleName, id) {
+  let path = moduleName;
+  if (id) {
+    path = `${moduleName}(/:id)`;
+  }
+  return (store) => ({
+    path,
+    onEnter: (opts, replace, next) => {
+      store.dispatch(common.initMenu());
+      next();
+    },
+    onLeave: () => {
+    },
+    getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        cb(null, [
-          // Remove imports!
-          require('./Counter').default(store)
-        ])
-      })
-    }
-
-    However, this is not necessary for code-splitting! It simply provides
-    an API for async route definitions. Your code splitting should occur
-    inside the route `getComponent` function, since it is only invoked
-    when the route exists and matches.
-*/
+        /* eslint-disable import/no-dynamic-require */
+        const container = require(`./${moduleName}/containers/index`).default;
+        const reducer = require(`./${moduleName}/modules/index`).default;
+        injectReducer(store, { key: moduleName, reducer });
+        cb(null, container);
+      });
+    },
+  });
+}
 
 export default createRoutes;

@@ -74,16 +74,22 @@ Edit at Your Own Risk
 // Environment
 // ------------------------------------
 // N.B.: globals added here must _also_ be added to .eslintrc
+let env = config.env;
+if (env === 'online' || env === 'pre' || env === 'qaif' || env === 'qafc' || env === 'dev') {
+  env = 'production'; // uat or release(give to QA) is the same as production except the uat api address
+}
+
 config.globals = {
   'process.env'  : {
-    NODE_ENV : JSON.stringify(config.env),
+    NODE_ENV : JSON.stringify(env),
   },
   NODE_ENV     : config.env,
-  __DEV__      : config.env === 'development',
-  __PROD__     : config.env === 'production',
-  __TEST__     : config.env === 'test',
-  __UAT__      : config.env === 'uat',
-  __DEVREMOTE__: config.env === 'devRemote',
+  __ONLINE__      : config.env === 'online',
+  __PRE__         : config.env === 'pre',
+  __QAIF__        : config.env === 'qaif',
+  __QAFC__        : config.env === 'qafc',
+  __DEV__         : config.env === 'dev',
+  __DEVELOPMENT__ : config.env === 'development',
   __COVERAGE__ : !argv.watch && config.env === 'test',
   __BASENAME__ : JSON.stringify(process.env.BASENAME || ''),
 };
@@ -102,14 +108,13 @@ config.compiler_vendors = config.compiler_vendors
       `it won't be included in the webpack vendor bundle.
        Consider removing it from \`compiler_vendors\` in ~/config/index.js`
     );
+    return undefined;
   });
 
 // ------------------------------------
 // Utilities
 // ------------------------------------
 function base() {
-  // const args = [config.path_base].concat([].slice.call(arguments));
-  // return path.resolve(...args);
   const args = [config.path_base].concat([].slice.call(arguments));
   return path.resolve.apply(path, args);
 }
@@ -134,7 +139,5 @@ if (overrides) {
 } else {
   debug('No environment overrides found, defaults will be used.');
 }
-
-// config.node={fs:'empty'}
 
 module.exports = config;

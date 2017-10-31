@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Upload, message, Button, Icon } from 'antd';
 import { getBaseUrl } from '../../util';
 // 导入下载excel方法，或者写在这个页面也是可以的，因为这个方法没有经过action
-import { downExcel } from '../../routes/Manage/Distribution/modules/index';
+// 下载模板暂时废弃：import { downExcel } from '../../routes/Manage/Distribution/modules/index';
 
 export default class EntryData extends Component {
   render() {
@@ -57,9 +57,9 @@ export default class EntryData extends Component {
     };
     return (
       <div>
-        <p>1、下载导入模板 <a onClick={downExcel} role="button" tabIndex={0}>点此下载</a>；</p>
-        <p>2、将订单信息填入Excel模板；</p>
-        <p>3、将填好订单信息的Excel模板上传；</p>
+        {/* <p>1、下载导入模板 <a onClick={downExcel} role="button" tabIndex={0}>点此下载</a>；</p> */}
+        <p>1、将订单信息填入Excel模板；</p>
+        <p>2、将填好订单信息的Excel模板上传；</p>
         <Upload ref={(c) => { this.upload = c; }} {...uploadProps}>
           <Button style={{ marginTop:'16px' }}>
             <Icon type="upload" /> 选择导入文件

@@ -26,7 +26,7 @@ let render = () => {
 };
 
 // This code is excluded from production bundle
-if (__DEV__) {
+if (__DEVELOPMENT__) {
   if (module.hot) {
     // Development render functions
     const renderApp = render;

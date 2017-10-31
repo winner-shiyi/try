@@ -59,7 +59,7 @@ class View extends Component {
             loading={this.props.loading}
           />
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer style={{ textAlign: 'center', color:'#f5f5cc' }}>
           copyright &copy; 产业互联技术中心
         </Footer>
       </Layout>

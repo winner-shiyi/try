@@ -13,17 +13,73 @@ module.exports = {
   }),
 
   // ======================================================
-  // Overrides when NODE_ENV === 'production'
+  // Overrides when NODE_ENV === 'online'
   // ======================================================
-  production : (config) => ({
+  online : () => ({
     compiler_public_path     : '/',
     compiler_fail_on_warning : false,
     compiler_hash_type       : 'chunkhash',
-    compiler_devtool         : null,
+    compiler_devtool         : false,
     compiler_stats           : {
       chunks       : true,
       chunkModules : true,
       colors       : true,
     },
   }),
+  // ======================================================
+  // Overrides when NODE_ENV === 'release'
+  // ======================================================
+  qaif : () => ({
+    compiler_public_path     : '/',
+    compiler_fail_on_warning : false,
+    compiler_hash_type       : 'chunkhash',
+    compiler_devtool         : false,
+    compiler_stats           : {
+      chunks       : true,
+      chunkModules : true,
+      colors       : true,
+    },
+  }),
+  qafc : () => ({
+    compiler_public_path     : '/',
+    compiler_fail_on_warning : false,
+    compiler_hash_type       : 'chunkhash',
+    compiler_devtool         : false,
+    compiler_stats           : {
+      chunks       : true,
+      chunkModules : true,
+      colors       : true,
+    },
+  }),
+
+  // ======================================================
+  // Overrides when NODE_ENV === 'pre'
+  // ======================================================
+  pre : () => ({
+    compiler_public_path     : '/',
+    compiler_fail_on_warning : false,
+    compiler_hash_type       : 'chunkhash',
+    compiler_devtool         : false,
+    compiler_stats           : {
+      chunks       : true,
+      chunkModules : true,
+      colors       : true,
+    },
+  }),
+
+  // ======================================================
+  // Overrides when NODE_ENV === 'dev'
+  // ======================================================
+  dev : () => ({
+    compiler_public_path     : '/',
+    compiler_fail_on_warning : false,
+    compiler_hash_type       : 'chunkhash',
+    compiler_devtool         : false,
+    compiler_stats           : {
+      chunks       : true,
+      chunkModules : true,
+      colors       : true,
+    },
+  }),
+
 };

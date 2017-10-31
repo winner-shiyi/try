@@ -1,30 +1,12 @@
 import React, { Component } from 'react';
 import { DatePicker, Row, Col } from 'antd';
-import moment from 'moment';
 
 export default class DateRange extends Component {
-  // static propTypes = {
-  //   // value: PropTypes.array,
-  //   onChange: PropTypes.func,
-  // }
-
   state = {
     startValue: null,
     endValue: null,
     endOpen: false,
   }
-
-  componentWillReceiveProps(nextProps) {
-    // Should be a controlled component.
-    if ('value' in nextProps) {
-      const value = nextProps.value || {};
-      this.setState(Object.assign({}, this.state, {
-        startValue: value[0],
-        endValue: value[1],
-      }));
-    }
-  }
-
   onChange(field, value) {
     this.setState({
       [field]: value,
@@ -41,7 +23,7 @@ export default class DateRange extends Component {
 
   onEndChange(value) {
     this.onChange('endValue', value);
-    this.props.onChange({
+    this.props.onChange({ // this.props.onChange这是antd提供的方法
       startValue: this.state.startValue,
       endValue: value,
     });
@@ -49,27 +31,18 @@ export default class DateRange extends Component {
 
   disabledStartDate(startValue) {
     const endValue = this.state.endValue;
-    if (startValue && !endValue) {
-      return startValue.valueOf() > Date.now();
-    }
-    if (!startValue) {
+    if (!startValue || !endValue) {
       return false;
     }
-    return startValue.valueOf() > (moment(moment(endValue).format('YYYY-MM-DD')).valueOf() + 86400000) ||
-      startValue.valueOf() > Date.now();
-    // (new Date().setDate(new Date().getDate() + 1))
+    return startValue.valueOf() > endValue.valueOf();
   }
 
   disabledEndDate(endValue) {
     const startValue = this.state.startValue;
-    if (!startValue && endValue) {
-      return endValue.valueOf() > Date.now();
-    }
-    if (!endValue) {
+    if (!endValue || !startValue) {
       return false;
     }
-    return endValue.valueOf() < (moment(moment(startValue).format('YYYY-MM-DD')).valueOf()) ||
-      endValue.valueOf() > Date.now();
+    return endValue.valueOf() <= startValue.valueOf();
   }
 
   handleStartOpenChange(open) {
@@ -83,15 +56,16 @@ export default class DateRange extends Component {
   }
 
   render() {
-    const { startValue, endValue } = this.state;
+    const { startValue, endValue, endOpen } = this.state;
     return (
       <Row span={24}>
         <Col span={11}>
           <DatePicker
             disabledDate={this.disabledStartDate.bind(this)}
-            format="YYYY-MM-DD"
+            format="YYYY-MM-DD HH:mm"
+            showTime
             value={startValue}
-            placeholder="请选择开始日期"
+            placeholder="选择开始时间"
             onChange={this.onStartChange.bind(this)}
             onOpenChange={this.handleStartOpenChange.bind(this)}
           />
@@ -102,10 +76,12 @@ export default class DateRange extends Component {
         <Col span={11}>
           <DatePicker
             disabledDate={this.disabledEndDate.bind(this)}
-            format="YYYY-MM-DD"
+            format="YYYY-MM-DD HH:mm"
+            showTime
             value={endValue}
-            placeholder="请选择结束日期"
+            placeholder="选择结束时间"
             onChange={this.onEndChange.bind(this)}
+            open={endOpen}
             onOpenChange={this.handleEndOpenChange.bind(this)}
           />
         </Col>

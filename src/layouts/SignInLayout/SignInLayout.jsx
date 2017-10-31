@@ -16,7 +16,7 @@ const SignInLayout = ({ children }) => (
         <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 600 }}>
           {children}
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer style={{ textAlign: 'center', color:'#f5f5cc' }}>
           copyright &copy; 产业互联技术中心
         </Footer>
       </Layout>

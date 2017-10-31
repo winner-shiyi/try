@@ -60,7 +60,7 @@ function menuOpen(openKeys) {
     payload: openKeys,
   };
 }
-const initialMenu = () => ({
+const initMenu = () => ({
   type: INITIAL_MENU,
   payload: location.pathname,
 });
@@ -78,7 +78,7 @@ function menuLoad() {
             const firstLink = json.resultData.find((item) => !!item.href);
             firstLink && browserHistory.replace(firstLink.href);
           }
-          dispatch(initialMenu());
+          dispatch(initMenu());
           return json;
         }
         return false;
@@ -201,7 +201,7 @@ export const common = {
   clickTopMenu,
   clickMenuItem,
   clickSubMenu,
-  initialMenu,
+  initMenu,
   initCommon,
   initCompany,
 };

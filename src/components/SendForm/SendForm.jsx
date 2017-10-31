@@ -44,10 +44,9 @@ export default class SendForm extends Component {
   onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]
     clearTimeout(this.timer);
     // 如果商家名称为空则不发送请求，并清空原有填充值
-    if (!(`${val}`).trim()) {
+    if (!val || !(`${val}`).trim()) {
       return;
     }
-
     this.timer = setTimeout(() => {
       this.props.senderSearch(val).then((items) => {
         this.setState({
@@ -103,7 +102,8 @@ export default class SendForm extends Component {
       const val2 = this.props.values.addressDetail.value;
       this.placeSearch.search(val1Arr.join(',') + val2, (status, result) => {
         if (result.info === 'OK' && result.poiList) {
-          const pois = result.poiList.pois[0];
+          const filterPois = result.poiList.pois.filter((item) => item.adcode);
+          const pois = filterPois[0];
           window.mapInfosToWindow = {
             adcode: pois.adcode,
             latitude: pois.location.lat,

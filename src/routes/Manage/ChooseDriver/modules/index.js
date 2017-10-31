@@ -187,15 +187,9 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   loading: false,
-  // noteStatusData: [],
-  // exportStatusData: [],
   data: {
     driverList:[],
   },
-  // driverStatus:[
-  //   ['0', '配送中'],
-  //   ['1', '已完成'],
-  // ],
   page: {
     pageNo: '1',
     pageSize: '10',

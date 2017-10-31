@@ -19,16 +19,18 @@ export const getSessionValue = (key) => JSON.parse(sessionStorage.getItem('user'
 
 export const getNodeEnv = () => {
   let env = 'development';
-  if (__DEV__) {
+  if (__ONLINE__) {
+    env = 'online';
+  } else if (__PRE__) {
+    env = 'pre';
+  } else if (__QAIF__) {
+    env = 'qaif';
+  } else if (__QAFC__) {
+    env = 'qafc';
+  } else if (__DEV__) {
+    env = 'dev';
+  } else if (__DEVELOPMENT__) {
     env = 'development';
-  } else if (__TEST__) {
-    env = 'test';
-  } else if (__PROD__) {
-    env = 'production';
-  } else if (__UAT__) {
-    env = 'uat';
-  } else if (__DEVREMOTE__) {
-    env = 'devRemote';
   }
   return env;
 };

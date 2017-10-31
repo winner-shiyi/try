@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Modal, Button } from 'antd';
-import { Link } from 'react-router';
+// import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 import EntryData from './EntryData';
 import Table from '../Table';
@@ -27,11 +27,33 @@ export default class OrderListPage extends Component {
     });
   }
   render() {
+    const createButton = (btnOpts) => {
+      const res = btnOpts.map((item, index) => {
+        if (!item.hidden) {
+          const key = `button${index}`;
+          return (
+            <Button
+              key={key}
+              type={item.type || 'primary'}
+              onClick={item.onClick.bind(this)}
+              className={item.className}
+            >
+              {item.label}
+            </Button>
+          );
+        }
+        return undefined;
+      });
+      return res;
+    };
+
     const {
       title,
       loading = false,
       columns,
+      buttons,
       data,
+      rowKey,
       search,
       changeSearch,
       searchParams,
@@ -52,13 +74,15 @@ export default class OrderListPage extends Component {
               </h2>
             </Col>
             <Col>
-              <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary">新建车配任务</Link>
+              {/* <Link to="/Manage/AddDistribution" className="add-btn ant-btn ant-btn-primary Distribution-new-btn">
+              新建车配任务</Link>
               <Button
                 type="default"
                 htmlType="submit"
                 onClick={this.props.showModal}
                 className="order-upload-btn"
-              >订单批量导入</Button>
+              >订单批量导入</Button> */}
+              {createButton(buttons)}
             </Col>
           </Row>
         }
@@ -77,7 +101,7 @@ export default class OrderListPage extends Component {
           loading={loading}
           search={search}
           expandedRowRender={expandedRowRender}
-          rowKey="orderNo"
+          rowKey={rowKey}
           pagination={
             page ? {
               current: page.pageNo,

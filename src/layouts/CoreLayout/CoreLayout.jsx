@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
-import { Scrollbars } from 'react-custom-scrollbars';
+import Scrollbars from 'react-custom-scrollbars';
 import { connect } from 'react-redux';
 import SideMenu from '../../components/SideMenu';
 import '../../styles/core.scss';

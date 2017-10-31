@@ -57,8 +57,6 @@ class FormPage extends Component {
         const receiversInfoList = [];
         const receiversInfoListObj = {};
         let mw = {}; // 存放收货信息的adcode 和 经纬度信息
-        let timeCompareLock = true; // 时间比较变量锁
-
         Object.keys(values).forEach((key) => {
           const k = Number(key.split('-')[1]);
           const name = key.split('-')[0];
@@ -91,18 +89,14 @@ class FormPage extends Component {
             mw = window[`${k}mapInfosToWindow`];
             Object.assign(receiversInfoListObj[k], mw);
             delete receiversInfoListObj[k].region;
-            if (name === 'deliveryBeginTime') {
-              receiversInfoListObj[k].deliveryBeginTime =
-              new Date(receiversInfoListObj[k].deliveryBeginTime).getTime();
+            // 特殊处理配送时间
+            if (name === 'deliveryTime') {
+              const starTime = receiversInfoListObj[k].deliveryTime && receiversInfoListObj[k].deliveryTime.startValue;
+              const endTime = receiversInfoListObj[k].deliveryTime && receiversInfoListObj[k].deliveryTime.endValue;
+              receiversInfoListObj[k].deliveryBeginTime = starTime ? new Date(starTime).getTime() : null;
+              receiversInfoListObj[k].deliveryEndTime = endTime ? new Date(endTime).getTime() : null;
             }
-            if (name === 'deliveryEndTime') {
-              receiversInfoListObj[k].deliveryEndTime =
-              new Date(receiversInfoListObj[k].deliveryEndTime).getTime();
-            }
-            if (receiversInfoListObj[k].deliveryEndTime !== 0 && // 等于0的情况是，选择具体时间后又清空
-              receiversInfoListObj[k].deliveryEndTime < receiversInfoListObj[k].deliveryBeginTime) {
-              timeCompareLock = false;
-            }
+            delete receiversInfoListObj[k].deliveryTime;
           }
         });
         Object.keys(receiversInfoListObj).forEach((key) => {
@@ -113,19 +107,17 @@ class FormPage extends Component {
           message.error('亲，请输入正确有效的地址哦~');
           return;
         }
-        // 送达起始时间不能大于结束时间
-        if (!timeCompareLock) {
-          message.error('送达起始时间不能大于送达结束时间哦~');
-          return;
-        }
         this.props.submit({
           createType: this.state.createType,
           orderNo: this.props.params.id || '',
           senderInfo,
           receiversInfoList,
         }).then((isSuccess) => {
-          this.props.clearData();
-          isSuccess && this.handleGo(); // 跳转到列表页
+          if (isSuccess) {
+            // isSuccess成功的时候是一个对象，错误的时候是一个false，false.success等于undefined不会报错
+            this.props.clearData();
+            this.handleGo(); // 跳转到列表页
+          }
         });
       }
     });
@@ -192,7 +184,7 @@ class FormPage extends Component {
             {
               receiverFields.length && receiverFields.map((item, index) => {
                 const AmapId = `mapContainessrGet${index}`;
-                // const key = `receiverField${index}`; 调很久的大坑，牢记
+                // 调很久的大坑，牢记 const key = `receiverField${index}`; 
                 const key = `receiverField${item.id}`;
                 return (<ReceiverForm
                   form={form}
@@ -223,17 +215,8 @@ class FormPage extends Component {
               loading={this.props.loading}
             >提交
             </Button>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="save-form-button"
-              loading={this.props.loading}
-              onClick={this.handleSaveClick}
-            >保存草稿
-            </Button>
           </FormItem>
         </Form>
-        {/* <Row><BackTop>111</BackTop></Row> */}
       </div>
     );
   }

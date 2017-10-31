@@ -13,11 +13,13 @@ export default class ReceiverForm extends Component {
     super(props);
     this.state = {
       dataSource: [],
+      startValue: null,
+      endValue: null,
+      endOpen: false,
     };
     this.AmapId = `mapId${Math.random()}`;
     this.timer1 = null;
   }
-
   componentDidMount() {
     const map = new window.AMap.Map(this.AmapId, {
       resizeEnable: true,
@@ -40,7 +42,7 @@ export default class ReceiverForm extends Component {
   onShopNameChange = (val) => { // 使用箭头函数,让this指向sendForm组件,否则这个this指向的是fields[0]
     clearTimeout(this.timer);
     // 如果商家名称为空则不发送请求，并清空原有填充值
-    if (!(`${val}`).trim()) {
+    if (!val || !(`${val}`).trim()) {
       return;
     }
 
@@ -79,7 +81,6 @@ export default class ReceiverForm extends Component {
   onFocus = () => {
     this.props.getActiveId(this.props.id);
   }
-
   /**
    * 地区改变时
    */
@@ -104,7 +105,9 @@ export default class ReceiverForm extends Component {
       const val2 = this.props.values[`addressDetail-${this.props.id}-${suffix}`].value;
       this.placeSearch.search(`${val1Arr.join(',')},${val2}`, (status, result) => {
         if (result.info === 'OK' && result.poiList) {
-          const pois = result.poiList.pois[0];
+          const filterPois = result.poiList.pois.filter((item) => item.adcode);
+          const pois = filterPois[0];
+          // 不能这么写是因为比如：富春路100,这个地址的第一个adcode居然拿不到，const pois = result.poiList.pois[0];
           window[`${this.props.id}mapInfosToWindow`] = {
             adcode: pois.adcode,
             latitude: pois.location.lat,
@@ -117,7 +120,6 @@ export default class ReceiverForm extends Component {
       });
     }, 400);
   }
-
   /**
    * 删除收货地址
    * @param id 收货地址的id
@@ -141,7 +143,7 @@ export default class ReceiverForm extends Component {
 
     // 以下是绑定收货信息表单的【收货地区】和【详细地址】onChange事件
     fields[4].onChange = this.onRegionChange;
-    fields[6].onChange = this.onAddressDetailChange;
+    fields[5].onChange = this.onAddressDetailChange;
 
     return (
       <li className="receiverForm-item-box" data-id={id}>

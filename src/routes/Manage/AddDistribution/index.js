@@ -6,9 +6,9 @@ export const moduleName = 'AddDistribution';
 
 export default (store) => ({
   path : `${moduleName}(/:id)`,
-  // onEnter: ({ location, routes, params }, replace, next) => {
+  // 原来的参数配置长这样：onEnter: ({ location, routes, params }, replace, next) => {
   onEnter: ({ params }, replace, next) => {
-    store.dispatch(common.initialMenu());
+    store.dispatch(common.initMenu());
     if (!params.id) {
       store.dispatch(actions.clearData()); // 路由从编辑任务切换到新建任务的时候要清空数据
     } else {

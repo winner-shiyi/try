@@ -89,6 +89,8 @@ export const geneBox = (field, opts = {}) => {
           {...defaultOpts}
           showTime={{ format: 'HH:mm' }}
           format="YYYY-MM-DD HH:mm"
+          onChange={newField.onChange}
+          disabledDate={newField.disabledStartDate}
         />
       );
     case 'dateRange':
@@ -184,7 +186,7 @@ export const geneBox = (field, opts = {}) => {
           type="textarea"
           {...defaultOpts}
           autosize={newField.disabled ? true : { minRows: 2, maxRows: 6 }}
-          onChange={field.onChange}
+          onChange={newField.onChange}
         />
       );
     case 'radio':
@@ -507,7 +509,7 @@ export const onFieldsChange = (props, flds) => {
   };
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i];
-    const fld = props.fields.find(findFun(fields[key]));
+    const fld = props.fields.find(findFun(fields[key].name));
     fields[key].type = fld && fld.type;
   }
   props.changeRecord && props.changeRecord({

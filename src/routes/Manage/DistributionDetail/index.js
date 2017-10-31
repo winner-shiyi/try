@@ -1,24 +1,4 @@
-import { injectReducer } from '../../../store/reducers';
-import { common } from '../../../store/common';
+import { createChildRoutes } from '../index';
 
 export const moduleName = 'DistributionDetail';
-
-export default (store) => ({
-  path : `${moduleName}/:id`,
-  onEnter: (opts, replace, next) => {
-    store.dispatch(common.initialMenu());
-    next();
-  },
-  onLeave: () => {
-  },
-  getComponent(nextState, cb) {
-    require.ensure([], (require) => {
-      const propertyContainer = require('./containers').default;
-      const reducer = require('./modules').default;
-
-      injectReducer(store, { key: moduleName, reducer });
-
-      cb(null, propertyContainer);
-    });
-  },
-});
+export default createChildRoutes(moduleName, '/:id');

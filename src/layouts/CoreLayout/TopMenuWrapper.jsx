@@ -36,7 +36,7 @@ class TopMenu extends Component {
   componentWillReceiveProps(newProps) {
     if (newProps.firstLeaf && (newProps.firstLeaf.href !== (this.props.firstLeaf && this.props.firstLeaf.href))) {
       browserHistory.push(newProps.firstLeaf.href); // TODO
-      this.props.initialMenu();
+      this.props.initMenu();
     }
   }
 
@@ -89,7 +89,7 @@ const TopMenuWrapper = connect((state) => {
   };
 }, {
   clickTopMenu: common.clickTopMenu,
-  initialMenu: common.initialMenu,
+  initMenu: common.initMenu,
 })(TopMenu);
 
 export default TopMenuWrapper;
