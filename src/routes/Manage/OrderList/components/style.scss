@@ -1,0 +1,48 @@
+.Distribution-btn{
+  height: 28px;
+  line-height: 28px;
+  padding: 0 15px;
+}
+.Distribution-dispatch-btn {
+  background: #f9980a;
+  border-color: #f9980a;
+  margin: 10px 0;
+  letter-spacing: 2px;
+  &:hover {
+    background: #f9980a;
+    border-color: #f9980a;
+  }
+}
+.Distribution-cancel-btn{
+  margin-top:10px;
+}
+.Distribution-detail-btn{
+  letter-spacing: 2px;
+}
+.Distribution-edit-btn{
+  background: #6194d6;
+  border-color: #6194d6;
+  color: #fff;
+  letter-spacing: 2px;
+  margin: 10px 0;
+  &:hover {
+    background: #6194d6;
+    border-color: #6194d6;
+    color: #403a3a;
+  }
+}
+.Distribution-delete-btn{
+  background: #df2e31;
+  border-color: #df2e31;
+  
+  &:hover,&:active,&:focus{
+    color: #f04134;
+    background-color: #f7f7f7;
+    border-color: #d9d9d9;
+  }
+}
+.Distribution-new-btn {
+  height: 26px;
+  line-height: 26px;
+  padding:0 15px;
+}
